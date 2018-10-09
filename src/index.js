@@ -10,6 +10,7 @@ import {
   Switch,
   Redirect
 } from "react-router-dom";
+import "./firebaseAuth";
 
 import "./main.css";
 import reducers from "./reducers";
@@ -24,8 +25,8 @@ ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <Router>
       <div>
-        <Route path="/" component={App} />
-        <Route path="/login" component={Auth} />
+        <Route exact path="/" component={App} />
+        <Route path="/autoryzacja" component={Auth} />
         <Route
           path="/crm"
           component={Crm_panel}

@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import { Link } from "react-router-dom";
-import { createUser } from "../action/index";
+import { createUser, loginUser } from "../action/index";
 
 class Auth extends Component {
+  isRegister = false;
+
   renderField(field) {
     return (
       <div>
@@ -21,10 +23,19 @@ class Auth extends Component {
     const email = e.email;
     const password = e.password;
 
-    this.props.createUser(email, password, () => {
-      this.props.history.push("/crm");
-    });
+    if (!this.isRegister) {
+      this.props.loginUser(email, password, () => {
+        this.props.history.push("/crm");
+      });
+    }
+
+    if (this.isRegister) {
+      this.props.createUser(email, password, () => {
+        this.props.history.push("/crm");
+      });
+    }
   }
+
   render() {
     const { handleSubmit } = this.props;
 
@@ -33,6 +44,9 @@ class Auth extends Component {
         onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
         className="auth__form"
       >
+        <h2 className="auth__title">
+          Formularz {this.isRegister ? "Rejestracyjny" : "Logowania"}
+        </h2>
         <Field
           type="text"
           label="E-mail"
@@ -49,6 +63,17 @@ class Auth extends Component {
         <Link to="/" className="auth__submit auth__submit--return">
           Cofnij
         </Link>
+        <p className="auth__register">
+          Jeśli nie posiadasz konta kliknij{" "}
+          <span
+            onClick={() => {
+              this.isRegister = !this.isRegister;
+              this.forceUpdate();
+            }}
+          >
+            TUTAJ!
+          </span>
+        </p>
       </form>
     );
   }
@@ -76,6 +101,6 @@ export default reduxForm({
 })(
   connect(
     null,
-    { createUser }
+    { createUser, loginUser }
   )(Auth)
 );

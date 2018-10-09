@@ -8,13 +8,19 @@ import {
 const auth = (state = [], action) => {
   switch (action.type) {
     case LOGIN_USER_SUCCESS:
-      const userIds = action.user.uid;
+      const {
+        user: {
+          user: { uid: userIds }
+        }
+      } = action;
       return { ...state, loggedIn: true, userIds };
     case LOGIN_USER_FAIL:
       return { ...state, loggedIn: false };
     case CREATE_USER_SUCCESS:
       const {
-        user: { uid: userId }
+        user: {
+          user: { uid: userId }
+        }
       } = action;
       return { ...state, loggedIn: true, userId };
     case CREATE_USER_FAIL:
