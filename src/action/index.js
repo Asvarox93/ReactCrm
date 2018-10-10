@@ -15,8 +15,18 @@ export const createUser = (email, pass, callback) => dispatch => {
     .catch(error => dispatch(createUserFail));
 };
 
-export const createUserSuccess = (resp, callback) => {
-  callback();
+export const createUserSuccess = (resp, callback) => dispatch => {
+  const user = firebase.auth().currentUser;
+  user
+    .sendEmailVerification()
+    .then(function() {
+      callback();
+    })
+    .catch(function(error) {
+      //TODO: Do przerobienia dispatch.
+      error => dispatch(createUserFail);
+    });
+
   return {
     type: CREATE_USER_SUCCESS,
     user: resp
