@@ -5,13 +5,16 @@ import { Link } from "react-router-dom";
 import { createUser, loginUser } from "../action/index";
 
 class Auth extends Component {
-  isRegister = false;
+  constructor(props) {
+    super(props);
+    this.state = { isRegister: false };
+  }
 
   renderField(field) {
     return (
-      <div>
+      <div className={field.notRegister ? "auth__field--hide" : "auth__field"}>
         <label className="auth__label">{field.label}</label>
-        <input {...field.input} type={field.type} className="auth__field" />
+        <input {...field.input} type={field.type} className="auth__input" />
         <p className="auth__errors">
           {field.meta.touched ? field.meta.error : ""}
         </p>
@@ -23,14 +26,15 @@ class Auth extends Component {
     const email = e.email;
     const password = e.password;
 
-    if (!this.isRegister) {
+    if (!this.state.isRegister) {
       this.props.loginUser(email, password, () => {
         this.props.history.push("/crm");
       });
     }
 
-    if (this.isRegister) {
-      this.props.createUser(email, password, () => {
+    if (this.state.isRegister) {
+      const nickname = e.nickname;
+      this.props.createUser(email, password, nickname, () => {
         this.props.history.push("/crm");
       });
     }
@@ -45,8 +49,15 @@ class Auth extends Component {
         className="auth__form"
       >
         <h2 className="auth__title">
-          Formularz {this.isRegister ? "Rejestracyjny" : "Logowania"}
+          Formularz {this.state.isRegister ? "Rejestracyjny" : "Logowania"}
         </h2>
+        <Field
+          type="text"
+          label="Nazwa"
+          notRegister={!this.state.isRegister}
+          name="nickname"
+          component={this.renderField}
+        />
         <Field
           type="text"
           label="E-mail"
@@ -64,11 +75,10 @@ class Auth extends Component {
           Cofnij
         </Link>
         <p className="auth__register">
-          Jeśli nie posiadasz konta kliknij{" "}
+          Jeśli nie posiadasz konta kliknij
           <span
             onClick={() => {
-              this.isRegister = !this.isRegister;
-              this.forceUpdate();
+              this.setState({ isRegister: !this.state.isRegister });
             }}
           >
             TUTAJ!
@@ -82,8 +92,8 @@ class Auth extends Component {
 function validate(values) {
   const errors = {};
 
-  if (!values.title) {
-    errors.title = "Prosze o wprowadzenie poprawnego adresu e-mail!";
+  if (!values.email) {
+    errors.email = "Prosze o wprowadzenie poprawnego adresu e-mail!";
   }
   if (!values.password) {
     errors.password = "Prosze o wprowadzenie poprawnego hasła!";

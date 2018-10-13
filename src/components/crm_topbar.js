@@ -1,7 +1,15 @@
 import React, { Component } from "react";
-
-export default class Crm_topbar extends Component {
+import { connect } from "react-redux";
+class Crm_topbar extends Component {
   render() {
-    return <div>s</div>;
+    return <div>Dzień dobry {this.props.nickname}</div>;
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    nickname: state.auth.auth.nickname
+  };
+};
+
+export default connect(mapStateToProps)(Crm_topbar);
