@@ -35,7 +35,7 @@ class Auth extends Component {
     if (this.state.isRegister) {
       const nickname = e.nickname;
       this.props.createUser(email, password, nickname, () => {
-        this.props.history.push("/crm");
+        this.setState({ isRegister: false });
       });
     }
   }

@@ -12,6 +12,7 @@ const auth = (state = [], action) => {
       const auth = {
         uid: user.uid,
         role: action.user.role,
+        privileges: action.user.privileges,
         nickname: user.displayName,
         email: user.email,
         emailVerified: user.emailVerified
@@ -21,9 +22,7 @@ const auth = (state = [], action) => {
       return { ...state, loggedIn: false };
     case CREATE_USER_SUCCESS:
       const {
-        user: {
-          user: { uid: userId }
-        }
+        user: { uid: userId }
       } = action;
       return { ...state, loggedIn: true, userId };
     case CREATE_USER_FAIL:

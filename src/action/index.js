@@ -24,11 +24,24 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
             .set({
               username: user.displayName,
               email: user.email,
-              role: "Admin"
+              role: "Admin",
+              privileges: {
+                dashboard: true,
+                klienci: true,
+                pracownicy: true,
+                zlecenia: true
+              }
             })
             .then(e => {
-              console.log("success - User created with DB");
-              return dispatch(createUserSuccess(user, callback));
+              firebase
+                .database()
+                .ref("crm/" + user.uid)
+                .set({
+                  owner: user.email
+                })
+                .then(() => {
+                  return dispatch(createUserSuccess(user, callback));
+                });
             })
             .catch(error => {
               //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
@@ -43,7 +56,7 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
     .catch(error => dispatch(createUserFail));
 };
 
-export const createUserSuccess = (resp, callback) => dispatch => {
+export const createUserSuccess = (resp, callback) => {
   callback();
   return {
     type: CREATE_USER_SUCCESS,
@@ -70,7 +83,10 @@ export const loginUser = (email, pass, callback) => dispatch => {
         .once("value")
         .then(function(snapshot) {
           const role = snapshot.val().role;
-          return dispatch(loginUserSuccess({ ...resp, role }, callback));
+          const privileges = snapshot.val().privileges;
+          return dispatch(
+            loginUserSuccess({ ...resp, role, privileges }, callback)
+          );
         });
     })
     .catch(error => {
