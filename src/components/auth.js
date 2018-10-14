@@ -42,7 +42,6 @@ class Auth extends Component {
 
   render() {
     const { handleSubmit } = this.props;
-
     return (
       <form
         onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
@@ -51,6 +50,9 @@ class Auth extends Component {
         <h2 className="auth__title">
           Formularz {this.state.isRegister ? "Rejestracyjny" : "Logowania"}
         </h2>
+        {this.state.isRegister
+          ? this.props.authRegisterError
+          : this.props.authLoginError}
         <Field
           type="text"
           label="Nazwa"
@@ -109,12 +111,19 @@ function validate(values) {
   return errors;
 }
 
+const mapStateToProps = state => {
+  return {
+    authRegisterError: state.auth.authRegisterError,
+    authLoginError: state.auth.authLoginError
+  };
+};
+
 export default reduxForm({
   validate,
   form: "authForm"
 })(
   connect(
-    null,
+    mapStateToProps,
     { createUser, loginUser }
   )(Auth)
 );

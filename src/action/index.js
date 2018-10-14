@@ -4,6 +4,7 @@ export const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS";
 export const CREATE_USER_FAIL = "CREATE_USER_FAIL";
 export const LOGIN_USER_SUCCESS = "LOGIN_USER_SUCCESS";
 export const LOGIN_USER_FAIL = "LOGIN_USER_FAIL";
+export const SIGN_OUT = "SIGN_OUT";
 
 export const createUser = (email, pass, nickname, callback) => dispatch => {
   firebase
@@ -41,19 +42,23 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
                 })
                 .then(() => {
                   return dispatch(createUserSuccess(user, callback));
+                })
+                .catch(error => {
+                  //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
+                  error => dispatch(createUserFail(error));
                 });
             })
             .catch(error => {
               //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
-              error => dispatch(createUserFail);
+              error => dispatch(createUserFail(error));
             });
         })
         .catch(function(error) {
           //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
-          error => dispatch(createUserFail);
+          error => dispatch(createUserFail(error));
         });
     })
-    .catch(error => dispatch(createUserFail));
+    .catch(error => dispatch(createUserFail(error)));
 };
 
 export const createUserSuccess = (resp, callback) => {
@@ -66,9 +71,16 @@ export const createUserSuccess = (resp, callback) => {
 
 //TODO: Odwołanmie z tego poniżej
 export const createUserFail = error => {
+  if (error.code === "auth/email-already-in-use") {
+    return {
+      type: CREATE_USER_FAIL,
+      error: "Ten adres email jest już używany przez inne konto."
+    };
+  }
+
   return {
     type: CREATE_USER_FAIL,
-    error
+    error: error.message
   };
 };
 
@@ -104,8 +116,29 @@ export const loginUserSuccess = (resp, callback) => {
 
 //TODO: Odwołanmie z tego poniżej
 export const loginUserFail = error => {
+  if (error.code === "auth/user-not-found") {
+    return {
+      type: LOGIN_USER_FAIL,
+      error: "Użytkownik nie istnieje lub hasło jest nieprawidłowe."
+    };
+  }
+
   return {
     type: LOGIN_USER_FAIL,
-    error
+    error: error.message
   };
+};
+
+export const onSignOut = () => dispatch => {
+  console.log("WYLOGOWANO");
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      return dispatch({ type: SIGN_OUT });
+    })
+    .catch(error => {
+      //TODO: odwołanie
+      console.log(error);
+    });
 };

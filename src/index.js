@@ -13,7 +13,7 @@ import {
 import "./firebaseAuth";
 
 import "./main.css";
-import reducers from "./reducers";
+import reducers, { initialState } from "./reducers";
 
 import App from "./components/app";
 import Auth from "./components/auth";
@@ -22,7 +22,14 @@ import Crm_panel from "./components/crm_panel";
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
+  <Provider
+    store={createStoreWithMiddleware(
+      reducers,
+      initialState,
+      window.__REDUX_DEVTOOLS_EXTENSION__ &&
+        window.__REDUX_DEVTOOLS_EXTENSION__()
+    )}
+  >
     <Router>
       <div>
         <Route exact path="/" component={App} />

@@ -7,4 +7,10 @@ const rootReducer = combineReducers({
   form: formReducer
 });
 
+const initialState = {
+  auth: "",
+  form: formReducer
+};
+
+export { initialState };
 export default rootReducer;

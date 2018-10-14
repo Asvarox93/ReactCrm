@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { onSignOut } from "../action/index";
 
 class Crm_topbar extends Component {
   showMenuWithPrivileges(privileges) {
@@ -43,7 +44,15 @@ class Crm_topbar extends Component {
             Dzień dobry
             {nickname ? nickname : email}
           </div>
-          <button className="topbar__userLogout">Logout</button>
+          <Link
+            to="/autoryzacja"
+            className="topbar__userLogout"
+            onClick={() => {
+              this.props.onSignOut();
+            }}
+          >
+            Logout
+          </Link>
         </div>
       );
     }
@@ -60,4 +69,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Crm_topbar);
+export default connect(
+  mapStateToProps,
+  { onSignOut }
+)(Crm_topbar);
