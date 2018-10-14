@@ -70,12 +70,16 @@ class Auth extends Component {
           name="password"
           component={this.renderField}
         />
-        <button className="auth__submit">Zaloguj</button>
+        <button className="auth__submit">
+          {this.state.isRegister ? "Zarejestruj" : "Zaloguj"}
+        </button>
         <Link to="/" className="auth__submit auth__submit--return">
           Cofnij
         </Link>
         <p className="auth__register">
-          Jeśli nie posiadasz konta kliknij
+          {this.state.isRegister
+            ? "Jeśli chcesz się zalogować kliknij "
+            : "Jeśli nie posiadasz konta kliknij "}
           <span
             onClick={() => {
               this.setState({ isRegister: !this.state.isRegister });

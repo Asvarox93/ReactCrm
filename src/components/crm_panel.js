@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Route, Link, Switch } from "react-router-dom";
 import TopBar from "./crm_topbar";
+import Zlecenia from "./crm_zlecenia";
+import Dashboard from "./crm_dashboard";
+import Klienci from "./crm_klienci";
+import Pracownicy from "./crm_pracownicy";
 
 class Crm_panel extends Component {
   render() {
@@ -20,7 +24,12 @@ class Crm_panel extends Component {
       return (
         <div>
           <TopBar />
-          React CRM started
+          <Switch>
+            <Route exact path="/crm" component={Dashboard} />
+            <Route path="/crm/zlecenia" component={Zlecenia} />
+            <Route path="/crm/klienci" component={Klienci} />
+            <Route path="/crm/pracownicy" component={Pracownicy} />
+          </Switch>
         </div>
       );
     }
