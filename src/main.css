@@ -1,2 +1,4 @@
-.auth__field--hide {
-  display: none; }
+.auth__field {
+  color: #000; }
+  .auth__field--hide {
+    display: none; }

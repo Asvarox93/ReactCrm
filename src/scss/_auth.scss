@@ -1,0 +1,9 @@
+.auth {
+    &__field {
+        color: #000;
+
+        &--hide {
+            display: none;
+        }
+    }
+}
