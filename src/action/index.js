@@ -18,7 +18,22 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
           displayName: nickname
         })
         .then(() => {
-          return dispatch(createUserSuccess(user, callback));
+          firebase
+            .database()
+            .ref("users/" + user.uid)
+            .set({
+              username: user.displayName,
+              email: user.email,
+              role: "Admin"
+            })
+            .then(e => {
+              console.log("success - User created with DB");
+              return dispatch(createUserSuccess(user, callback));
+            })
+            .catch(error => {
+              //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
+              error => dispatch(createUserFail);
+            });
         })
         .catch(function(error) {
           //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
@@ -49,10 +64,17 @@ export const loginUser = (email, pass, callback) => dispatch => {
     .auth()
     .signInWithEmailAndPassword(email, pass)
     .then(resp => {
-      return dispatch(loginUserSuccess(resp, callback));
+      firebase
+        .database()
+        .ref("/users/" + resp.user.uid)
+        .once("value")
+        .then(function(snapshot) {
+          const role = snapshot.val().role;
+          return dispatch(loginUserSuccess({ ...resp, role }, callback));
+        });
     })
     .catch(error => {
-      dispatch(loginUserFail);
+      dispatch(loginUserFail(error));
     });
 };
 
@@ -60,7 +82,7 @@ export const loginUserSuccess = (resp, callback) => {
   callback();
   return {
     type: LOGIN_USER_SUCCESS,
-    user: resp
+    user: { ...resp }
   };
 };
 

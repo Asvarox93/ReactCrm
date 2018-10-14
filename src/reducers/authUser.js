@@ -11,6 +11,7 @@ const auth = (state = [], action) => {
       const user = action.user.user;
       const auth = {
         uid: user.uid,
+        role: action.user.role,
         nickname: user.displayName,
         email: user.email,
         emailVerified: user.emailVerified

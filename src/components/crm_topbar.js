@@ -8,6 +8,8 @@ class Crm_topbar extends Component {
 
 const mapStateToProps = state => {
   return {
+    role: state.auth.auth.role,
+    email: state.auth.auth.email,
     nickname: state.auth.auth.nickname
   };
 };

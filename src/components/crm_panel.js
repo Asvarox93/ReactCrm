@@ -9,6 +9,13 @@ class Crm_panel extends Component {
       auth: { auth: auth, loggedIn: loggedIn }
     } = this.props;
 
+    if (loggedIn && auth.role === "Admin") {
+      console.log("LOGGED AS ADMINISTRATOR");
+    }
+    if (loggedIn && auth.role === "User") {
+      console.log("LOGGED AS USER");
+    }
+
     if (loggedIn && auth.emailVerified) {
       return (
         <div>
