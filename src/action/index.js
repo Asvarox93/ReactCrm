@@ -41,7 +41,8 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
                   owner: user.email
                 })
                 .then(() => {
-                  return dispatch(createUserSuccess(user, callback));
+                  dispatch(createUserSuccess(user));
+                  callback();
                 })
                 .catch(error => {
                   //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
@@ -61,16 +62,15 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
     .catch(error => dispatch(createUserFail(error)));
 };
 
-export const createUserSuccess = (resp, callback) => {
-  callback();
+export const createUserSuccess = resp => {
   return {
     type: CREATE_USER_SUCCESS,
     user: resp
   };
 };
 
-//TODO: Odwołanmie z tego poniżej
 export const createUserFail = error => {
+  //TODO: dorobienie ifów na error.code (na wzór z dokumentacji)
   if (error.code === "auth/email-already-in-use") {
     return {
       type: CREATE_USER_FAIL,
@@ -96,9 +96,8 @@ export const loginUser = (email, pass, callback) => dispatch => {
         .then(function(snapshot) {
           const role = snapshot.val().role;
           const privileges = snapshot.val().privileges;
-          return dispatch(
-            loginUserSuccess({ ...resp, role, privileges }, callback)
-          );
+          dispatch(loginUserSuccess({ ...resp, role, privileges }));
+          callback();
         });
     })
     .catch(error => {
@@ -106,16 +105,15 @@ export const loginUser = (email, pass, callback) => dispatch => {
     });
 };
 
-export const loginUserSuccess = (resp, callback) => {
-  callback();
+export const loginUserSuccess = resp => {
   return {
     type: LOGIN_USER_SUCCESS,
     user: { ...resp }
   };
 };
 
-//TODO: Odwołanmie z tego poniżej
 export const loginUserFail = error => {
+  //TODO: dorobienie ifów na error.code (na wzór z dokumentacji)
   if (error.code === "auth/user-not-found") {
     return {
       type: LOGIN_USER_FAIL,
