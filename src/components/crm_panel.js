@@ -9,6 +9,7 @@ import Pracownicy from "./crm_pracownicy";
 
 class Crm_panel extends Component {
   render() {
+    const privileges = this.props.auth.auth.privileges;
     const {
       auth: { auth: auth, loggedIn: loggedIn }
     } = this.props;
@@ -69,4 +70,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Crm_panel);
+export default connect(
+  mapStateToProps,
+  null
+)(Crm_panel);

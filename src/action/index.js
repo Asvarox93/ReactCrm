@@ -19,40 +19,43 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
           displayName: nickname
         })
         .then(() => {
-          firebase
-            .database()
-            .ref("users/" + user.uid)
-            .set({
-              username: user.displayName,
-              email: user.email,
-              role: "Admin",
-              privileges: {
-                dashboard: true,
-                klienci: true,
-                pracownicy: true,
-                zlecenia: true
-              }
-            })
-            .then(e => {
-              firebase
-                .database()
-                .ref("crm/" + user.uid)
-                .set({
-                  owner: user.email
-                })
-                .then(() => {
-                  dispatch(createUserSuccess(user));
-                  callback();
-                })
-                .catch(error => {
-                  //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
-                  error => dispatch(createUserFail(error));
-                });
-            })
-            .catch(error => {
-              //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
-              error => dispatch(createUserFail(error));
-            });
+          createCrmID().then(crmId => {
+            firebase
+              .database()
+              .ref("users/" + user.uid)
+              .set({
+                username: user.displayName,
+                email: user.email,
+                role: "Admin",
+                crmKey: crmId,
+                privileges: {
+                  dashboard: true,
+                  klienci: true,
+                  pracownicy: true,
+                  zlecenia: true
+                }
+              })
+              .then(e => {
+                firebase
+                  .database()
+                  .ref("crm/" + crmId)
+                  .set({
+                    owner: user.email
+                  })
+                  .then(() => {
+                    dispatch(createUserSuccess(user));
+                    callback();
+                  })
+                  .catch(error => {
+                    //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
+                    error => dispatch(createUserFail(error));
+                  });
+              })
+              .catch(error => {
+                //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
+                error => dispatch(createUserFail(error));
+              });
+          });
         })
         .catch(function(error) {
           //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
@@ -60,6 +63,34 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
         });
     })
     .catch(error => dispatch(createUserFail(error)));
+};
+
+const createCrmID = (crypto = "", exist = true) => {
+  crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+  const result = checkIfCrmIDExist(crypto).then(result => {
+    return result;
+  });
+
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve(result);
+    }, 500);
+  });
+};
+
+const checkIfCrmIDExist = crypto => {
+  return firebase
+    .database()
+    .ref("crm/" + crypto.toString())
+    .once("value")
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        return checkIfCrmIDExist(crypto);
+      } else {
+        return crypto;
+      }
+    });
 };
 
 export const createUserSuccess = resp => {
@@ -96,7 +127,8 @@ export const loginUser = (email, pass, callback) => dispatch => {
         .then(function(snapshot) {
           const role = snapshot.val().role;
           const privileges = snapshot.val().privileges;
-          dispatch(loginUserSuccess({ ...resp, role, privileges }));
+          const crmKey = snapshot.val().crmKey;
+          dispatch(loginUserSuccess({ ...resp, role, privileges, crmKey }));
           callback();
         });
     })
@@ -125,6 +157,55 @@ export const loginUserFail = error => {
     type: LOGIN_USER_FAIL,
     error: error.message
   };
+};
+
+export const createCrmUser = (
+  email,
+  pass,
+  nickname,
+  privileges,
+  crmKey
+) => dispatch => {
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, pass)
+    .then(() => {
+      const user = firebase.auth().currentUser;
+      //TODO: do zrobienia przy weryfikacji Then i Catch.
+      user.sendEmailVerification();
+      user
+        .updateProfile({
+          displayName: nickname
+        })
+        .then(() => {
+          firebase
+            .database()
+            .ref("users/" + user.uid)
+            .set({
+              username: user.displayName,
+              email: user.email,
+              role: "Admin",
+              crmKey: crmKey,
+              privileges: {
+                dashboard: privileges.dashboard,
+                klienci: privileges.klienci,
+                pracownicy: privileges.pracownicy,
+                zlecenia: privileges.zlecenia
+              }
+            })
+            .then(() => {
+              dispatch(createUserSuccess(user));
+            })
+            .catch(error => {
+              //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
+              error => dispatch(createUserFail(error));
+            });
+        });
+    })
+    .catch(error => {
+      //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
+      error => dispatch(createUserFail(error));
+    });
 };
 
 export const onSignOut = () => dispatch => {

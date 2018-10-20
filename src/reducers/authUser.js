@@ -16,6 +16,7 @@ const auth = (state = [], action) => {
       auth = {
         uid: user.uid,
         role: action.user.role,
+        crmKey: action.user.crmKey,
         privileges: action.user.privileges,
         nickname: user.displayName,
         email: user.email,

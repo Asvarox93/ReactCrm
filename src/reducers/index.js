@@ -8,7 +8,16 @@ const rootReducer = combineReducers({
 });
 
 const initialState = {
-  auth: "",
+  auth: {
+    auth: {
+      privileges: {
+        dashboard: false,
+        klienci: false,
+        pracownicy: false,
+        zlecenia: false
+      }
+    }
+  },
   form: formReducer
 };
 
