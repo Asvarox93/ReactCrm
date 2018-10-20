@@ -28,9 +28,7 @@ class Auth extends Component {
 
     if (!this.state.isRegister) {
       this.props.loginUser(email, password, () => {
-        setTimeout(() => {
-          this.props.history.push("/crm");
-        }, 500);
+        this.props.history.push("/crm");
       });
     }
 
