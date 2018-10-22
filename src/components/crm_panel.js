@@ -9,9 +9,8 @@ import Pracownicy from "./crm_pracownicy";
 
 class Crm_panel extends Component {
   render() {
-    const privileges = this.props.auth.auth.privileges;
     const {
-      auth: { auth: auth, loggedIn: loggedIn }
+      auth: { auth, loggedIn }
     } = this.props;
 
     if (loggedIn && auth.role === "Admin") {

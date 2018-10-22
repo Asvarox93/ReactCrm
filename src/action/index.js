@@ -5,6 +5,8 @@ export const CREATE_USER_FAIL = "CREATE_USER_FAIL";
 export const LOGIN_USER_SUCCESS = "LOGIN_USER_SUCCESS";
 export const LOGIN_USER_FAIL = "LOGIN_USER_FAIL";
 export const SIGN_OUT = "SIGN_OUT";
+export const ADD_MODAL_ACTIVE = "ADD_MODAL_ACTIVE";
+export const ADD_MODAL_OFF = "ADD_MODAL_OFF";
 
 export const createUser = (email, pass, nickname, callback) => dispatch => {
   firebase
@@ -48,18 +50,18 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
                   })
                   .catch(error => {
                     //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
-                    error => dispatch(createUserFail(error));
+                    dispatch(createUserFail(error));
                   });
               })
               .catch(error => {
                 //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
-                error => dispatch(createUserFail(error));
+                dispatch(createUserFail(error));
               });
           });
         })
-        .catch(function(error) {
+        .catch(error => {
           //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
-          error => dispatch(createUserFail(error));
+          dispatch(createUserFail(error));
         });
     })
     .catch(error => dispatch(createUserFail(error)));
@@ -164,7 +166,8 @@ export const createCrmUser = (
   pass,
   nickname,
   privileges,
-  crmKey
+  crmKey,
+  callback
 ) => dispatch => {
   firebase
     .auth()
@@ -184,10 +187,10 @@ export const createCrmUser = (
             .set({
               username: user.displayName,
               email: user.email,
-              role: "Admin",
+              role: "User",
               crmKey: crmKey,
               privileges: {
-                dashboard: privileges.dashboard,
+                dashboard: true,
                 klienci: privileges.klienci,
                 pracownicy: privileges.pracownicy,
                 zlecenia: privileges.zlecenia
@@ -195,17 +198,32 @@ export const createCrmUser = (
             })
             .then(() => {
               dispatch(createUserSuccess(user));
+              callback();
             })
             .catch(error => {
               //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
-              error => dispatch(createUserFail(error));
+              dispatch(createUserFail(error));
             });
         });
     })
     .catch(error => {
       //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
-      error => dispatch(createUserFail(error));
+      dispatch(createUserFail(error));
     });
+};
+
+export const onModalShow = () => {
+  return {
+    type: ADD_MODAL_ACTIVE,
+    modal: true
+  };
+};
+
+export const onModalOff = () => {
+  return {
+    type: ADD_MODAL_OFF,
+    modal: false
+  };
 };
 
 export const onSignOut = () => dispatch => {

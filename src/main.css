@@ -2,3 +2,10 @@
   color: #000; }
   .auth__field--hide {
     display: none; }
+
+.formModal {
+  position: relative;
+  top: 30%;
+  left: 40%;
+  width: 80%;
+  height: 60vh; }

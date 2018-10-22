@@ -26,6 +26,7 @@ class Crm_topbar extends Component {
           );
         }
       }
+      return null;
     });
 
     return listItems;

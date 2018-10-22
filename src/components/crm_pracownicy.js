@@ -2,84 +2,39 @@ import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { createCrmUser } from "../action/index";
+import { onModalShow } from "../action/index";
+import UserRegisterModal from "./crm_pracownicy_add";
 
 class Pracownicy extends Component {
-  renderField(field) {
-    return (
-      <div className={field.notRegister ? "auth__field--hide" : "auth__field"}>
-        <label className="auth__label">{field.label}</label>
-        <input {...field.input} type={field.type} className="auth__input" />
-        <p className="auth__errors">
-          {field.meta.touched ? field.meta.error : ""}
-        </p>
-      </div>
-    );
-  }
-
-  onFormSubmit(e) {
-    const email = e.email;
-    const password = e.password;
-    const nickname = e.nickname;
-    const privileges = e.privileges;
-    const { role, crmKey } = this.props;
-
-    if (role === "Admin") {
-      this.props.createCrmUser(
-        email,
-        password,
-        nickname,
-        privileges,
-        crmKey,
-        () => {
-          alert("Pracownik dodany!");
-        }
-      );
+  onButtonClick() {
+    if (this.props.privileges.pracownicy) {
+      this.props.onModalShow();
+    } else {
+      return {};
     }
   }
 
+  showUserRegesterModal(active) {
+    if (active) {
+      return <UserRegisterModal />;
+    }
+    return;
+  }
+
   render() {
-    const { privileges, handleSubmit } = this.props;
-    const userPrivileges = {};
+    const { privileges, modalActive } = this.props;
+
     if (privileges.pracownicy === true) {
       return (
         <div>
           <div>Dane do wyświetlenia pracowników:</div>
-
-          <form
-            onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
-            className="auth__form"
+          <button
+            className="auth__submit"
+            onClick={this.onButtonClick.bind(this)}
           >
-            <h2 className="auth__title">
-              Formularz dodawania nowego pracownika
-            </h2>
-            {this.props.authRegisterError}
-            <Field
-              type="text"
-              label="Nazwa"
-              name="nickname"
-              component={this.renderField}
-            />
-            <Field
-              type="text"
-              label="E-mail"
-              name="email"
-              component={this.renderField}
-            />
-            <Field
-              type="password"
-              label="Password"
-              name="password"
-              component={this.renderField}
-            />
-            {/*TODO: checkboxy z uprawnieniami */}
-
-            <button className="auth__submit">Zarejestruj</button>
-            <Link to="/" className="auth__submit auth__submit--return">
-              Cofnij
-            </Link>
-          </form>
-
+            Dodaj
+          </button>
+          {this.showUserRegesterModal(modalActive)}
           {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
           {/* Component dodawania użytkownika powinien zawierać: Pole nickname, email, password i uid administratora */}
         </div>
@@ -107,9 +62,7 @@ function validate(values) {
 
 const mapStateToProps = state => {
   return {
-    authRegisterError: state.auth.authRegisterError,
-    crmKey: state.auth.auth.crmKey,
-    role: state.auth.auth.role,
+    modalActive: state.modal.modalActive,
     privileges: state.auth.auth.privileges
   };
 };
@@ -120,6 +73,6 @@ export default reduxForm({
 })(
   connect(
     mapStateToProps,
-    { createCrmUser }
+    { onModalShow }
   )(Pracownicy)
 );
