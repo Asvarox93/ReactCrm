@@ -4,8 +4,12 @@
     display: none; }
 
 .formModal {
-  position: relative;
+  background-color: black;
+  color: #fff;
+  position: absolute;
   top: 30%;
-  left: 40%;
-  width: 80%;
-  height: 60vh; }
+  left: 35%;
+  padding: 2rem;
+  z-index: 999; }
+  .formModal label {
+    color: #fff; }

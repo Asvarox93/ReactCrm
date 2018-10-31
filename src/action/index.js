@@ -1,4 +1,5 @@
 import * as firebase from "firebase";
+import axios from "axios";
 
 export const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS";
 export const CREATE_USER_FAIL = "CREATE_USER_FAIL";
@@ -7,6 +8,8 @@ export const LOGIN_USER_FAIL = "LOGIN_USER_FAIL";
 export const SIGN_OUT = "SIGN_OUT";
 export const ADD_MODAL_ACTIVE = "ADD_MODAL_ACTIVE";
 export const ADD_MODAL_OFF = "ADD_MODAL_OFF";
+export const GET_CRM_USERS_SUCCESS = "GET_CRM_USERS_SUCCESS";
+export const SET_USER_TO_EDIT = "SET_USER_TO_EDIT";
 
 export const createUser = (email, pass, nickname, callback) => dispatch => {
   firebase
@@ -160,6 +163,19 @@ export const loginUserFail = error => {
     error: error.message
   };
 };
+export const onSignOut = () => dispatch => {
+  console.log("WYLOGOWANO");
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      return dispatch({ type: SIGN_OUT });
+    })
+    .catch(error => {
+      //TODO: odwołanie
+      console.log(error);
+    });
+};
 
 export const createCrmUser = (
   email,
@@ -198,6 +214,7 @@ export const createCrmUser = (
             })
             .then(() => {
               dispatch(createUserSuccess(user));
+              dispatch(getCrmUsers(crmKey));
               callback();
             })
             .catch(error => {
@@ -211,31 +228,89 @@ export const createCrmUser = (
       dispatch(createUserFail(error));
     });
 };
+export const getCrmUsers = crm => dispatch => {
+  firebase
+    .database()
+    .ref("users")
+    .orderByChild("crmKey")
+    .equalTo(crm)
+    .once("value", snapshot => {
+      console.log("getCrmUsersVal: ", snapshot.val());
+      dispatch(getCrmUsersSuccess(snapshot.val()));
+    });
+};
 
-export const onModalShow = () => {
+export const getCrmUsersSuccess = resp => {
+  return {
+    type: GET_CRM_USERS_SUCCESS,
+    crmUsers: { ...resp }
+  };
+};
+
+export const setUserToEdit = user => {
+  return {
+    type: SET_USER_TO_EDIT,
+    editUser: user
+  };
+};
+
+export const editCrmUser = (
+  nickname,
+  privileges,
+  userUid,
+  crmKey,
+  callback
+) => dispatch => {
+  firebase
+    .database()
+    .ref("users/" + userUid)
+    .update({
+      username: nickname,
+      privileges: {
+        klienci: privileges.klienci,
+        pracownicy: privileges.pracownicy,
+        zlecenia: privileges.zlecenia
+      }
+    })
+    .then(() => {
+      dispatch(getCrmUsers(crmKey));
+      callback();
+    });
+  //TODO: update danych w bazie i ewentualnie w użytkowniku przez cloud functions.
+  return;
+};
+
+export const deleteCrmUser = (userUid, crmKey) => dispatch => {
+  axios
+    .post("https://us-central1-reactcrm-2477b.cloudfunctions.net/deleteUser", {
+      uid: userUid
+    })
+    .then(r => {
+      if (r.status === 200) {
+        firebase
+          .database()
+          .ref("users/" + userUid)
+          .set(null, e => {
+            alert("Pracownik został usunięty!");
+            dispatch(getCrmUsers(crmKey));
+          });
+      }
+    })
+    .catch(err => {
+      //TODO: catch err
+    });
+  return;
+};
+export const onModalShow = arg => {
   return {
     type: ADD_MODAL_ACTIVE,
-    modal: true
+    modal: { active: true, type: arg }
   };
 };
 
 export const onModalOff = () => {
   return {
     type: ADD_MODAL_OFF,
-    modal: false
+    modal: { active: false, type: "" }
   };
-};
-
-export const onSignOut = () => dispatch => {
-  console.log("WYLOGOWANO");
-  firebase
-    .auth()
-    .signOut()
-    .then(() => {
-      return dispatch({ type: SIGN_OUT });
-    })
-    .catch(error => {
-      //TODO: odwołanie
-      console.log(error);
-    });
 };

@@ -2,24 +2,45 @@ import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { createCrmUser, onModalOff } from "../action/index";
+import { editCrmUser, onModalOff } from "../action/index";
 
-class UserRegisterModal extends Component {
+class UserEditModal extends Component {
   renderField(field) {
-    return (
-      <div className="auth__field">
-        <label className="auth__label">{field.label}</label>
-        <input {...field.input} type={field.type} className="auth__input" />
-        <p className="auth__errors">
-          {field.meta.touched ? field.meta.error : ""}
-        </p>
-      </div>
-    );
+    if (field.type === "checkbox") {
+      return (
+        <div className="auth__field">
+          <label className="auth__label">{field.label}</label>
+          <input
+            {...field.input}
+            type={field.type}
+            checked={field.input.value ? true : false}
+            className="auth__input"
+          />
+          <p className="auth__errors">
+            {field.meta.touched ? field.meta.error : ""}
+          </p>
+        </div>
+      );
+    } else {
+      return (
+        <div className="auth__field">
+          <label className="auth__label">{field.label}</label>
+          <input
+            {...field.input}
+            type={field.type}
+            placeholder={field.disabled ? "*******" : ""}
+            disabled={field.disabled ? true : false}
+            className="auth__input"
+          />
+          <p className="auth__errors">
+            {field.meta.touched ? field.meta.error : ""}
+          </p>
+        </div>
+      );
+    }
   }
 
   onFormSubmit(e) {
-    const email = e.email;
-    const password = e.password;
     const nickname = e.nickname;
     const privileges = {
       pracownicy: e.pracownicy ? e.pracownicy : false,
@@ -27,19 +48,13 @@ class UserRegisterModal extends Component {
       klienci: e.klienci ? e.klienci : false
     };
     const { crmKey } = this.props;
+    const { uid: userUid } = this.props.editUser;
 
     if (this.props.privileges.pracownicy) {
-      this.props.createCrmUser(
-        email,
-        password,
-        nickname,
-        privileges,
-        crmKey,
-        () => {
-          this.closeRegisterModal();
-          alert("Pracownik dodany");
-        }
-      );
+      this.props.editCrmUser(nickname, privileges, userUid, crmKey, () => {
+        this.closeRegisterModal();
+        alert("Pracownik został zedytowany!");
+      });
     } else {
       alert("Nie masz uprawnień!");
     }
@@ -51,21 +66,18 @@ class UserRegisterModal extends Component {
 
   render() {
     const { privileges, handleSubmit } = this.props;
-    console.log("DODAWANIE");
-
+    console.log("EDYCJA");
     if (privileges.pracownicy === true) {
       return (
         <div className="formModal">
-          <div>Formularz dodawania pracownika:</div>
+          <div>Formularz Edycji Pracownika:</div>
 
           <form
             onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
             className="auth__form"
           >
-            <h2 className="auth__title">
-              Formularz dodawania nowego pracownika
-            </h2>
-            {this.props.authRegisterError}
+            <h2 className="auth__title">Formularz edycji pracownika</h2>
+            {this.props.dataError}
             <Field
               type="text"
               label="Imie i nazwisko"
@@ -76,32 +88,34 @@ class UserRegisterModal extends Component {
               type="text"
               label="E-mail"
               name="email"
+              disabled={true}
               component={this.renderField}
             />
             <Field
               type="password"
               label="Password"
               name="password"
+              disabled={true}
               component={this.renderField}
             />
             <h3>Uprawnienia:</h3>
             <Field
               name="klienci"
               label="klienci"
-              component={this.renderField}
               type="checkbox"
+              component={this.renderField}
             />
             <Field
               name="zlecenia"
               label="zlecenia"
-              component={this.renderField}
               type="checkbox"
+              component={this.renderField}
             />
             <Field
               name="pracownicy"
               label="pracownicy"
-              component={this.renderField}
               type="checkbox"
+              component={this.renderField}
             />
 
             <button className="auth__submit">Dodaj</button>
@@ -113,9 +127,6 @@ class UserRegisterModal extends Component {
               Zamknij
             </button>
           </form>
-
-          {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
-          {/* Component dodawania użytkownika powinien zawierać: Pole nickname, email, password i uid administratora */}
         </div>
       );
     } else {
@@ -131,6 +142,17 @@ class UserRegisterModal extends Component {
       );
     }
   }
+
+  componentDidMount() {
+    const { editUser } = this.props;
+    this.props.initialize({
+      nickname: editUser.user.username,
+      email: editUser.user.email,
+      klienci: editUser.user.privileges.klienci,
+      zlecenia: editUser.user.privileges.zlecenia,
+      pracownicy: editUser.user.privileges.pracownicy
+    });
+  }
 }
 function validate(values) {
   const errors = [];
@@ -140,7 +162,8 @@ function validate(values) {
 
 const mapStateToProps = state => {
   return {
-    authRegisterError: state.auth.authRegisterError,
+    editUser: state.fetchTable.editUser,
+    dataError: state.auth.dataError,
     crmKey: state.auth.auth.crmKey,
     role: state.auth.auth.role,
     privileges: state.auth.auth.privileges
@@ -149,10 +172,10 @@ const mapStateToProps = state => {
 
 export default reduxForm({
   validate,
-  form: "authUserForm"
+  form: "authEditUserForm"
 })(
   connect(
     mapStateToProps,
-    { createCrmUser, onModalOff }
-  )(UserRegisterModal)
+    { editCrmUser, onModalOff }
+  )(UserEditModal)
 );
