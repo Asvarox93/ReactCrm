@@ -28,7 +28,9 @@ const initialState = {
   },
   fetchTable: {
     crmUsers: "",
-    editUser: ""
+    editUser: "",
+    crmClients: "",
+    editClient: ""
   },
   form: formReducer
 };

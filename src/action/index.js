@@ -10,6 +10,8 @@ export const ADD_MODAL_ACTIVE = "ADD_MODAL_ACTIVE";
 export const ADD_MODAL_OFF = "ADD_MODAL_OFF";
 export const GET_CRM_USERS_SUCCESS = "GET_CRM_USERS_SUCCESS";
 export const SET_USER_TO_EDIT = "SET_USER_TO_EDIT";
+export const GET_CRM_CLIENTS_SUCCESS = "GET_CRM_CLIENTS_SUCCESS";
+export const SET_CLIENT_TO_EDIT = "SET_CLIENT_TO_EDIT";
 
 export const createUser = (email, pass, nickname, callback) => dispatch => {
   firebase
@@ -177,6 +179,8 @@ export const onSignOut = () => dispatch => {
     });
 };
 
+// ==========Pracownicy==========
+
 export const createCrmUser = (
   email,
   pass,
@@ -228,31 +232,6 @@ export const createCrmUser = (
       dispatch(createUserFail(error));
     });
 };
-export const getCrmUsers = crm => dispatch => {
-  firebase
-    .database()
-    .ref("users")
-    .orderByChild("crmKey")
-    .equalTo(crm)
-    .once("value", snapshot => {
-      console.log("getCrmUsersVal: ", snapshot.val());
-      dispatch(getCrmUsersSuccess(snapshot.val()));
-    });
-};
-
-export const getCrmUsersSuccess = resp => {
-  return {
-    type: GET_CRM_USERS_SUCCESS,
-    crmUsers: { ...resp }
-  };
-};
-
-export const setUserToEdit = user => {
-  return {
-    type: SET_USER_TO_EDIT,
-    editUser: user
-  };
-};
 
 export const editCrmUser = (
   nickname,
@@ -267,6 +246,7 @@ export const editCrmUser = (
     .update({
       username: nickname,
       privileges: {
+        dashboard: true,
         klienci: privileges.klienci,
         pracownicy: privileges.pracownicy,
         zlecenia: privileges.zlecenia
@@ -301,6 +281,182 @@ export const deleteCrmUser = (userUid, crmKey) => dispatch => {
     });
   return;
 };
+
+export const getCrmUsers = crm => dispatch => {
+  firebase
+    .database()
+    .ref("users")
+    .orderByChild("crmKey")
+    .equalTo(crm)
+    .once("value", snapshot => {
+      console.log("getCrmUsersVal: ", snapshot.val());
+      dispatch(getCrmUsersSuccess(snapshot.val()));
+    });
+};
+
+export const getCrmUsersSuccess = resp => {
+  return {
+    type: GET_CRM_USERS_SUCCESS,
+    crmUsers: { ...resp }
+  };
+};
+
+export const setUserToEdit = user => {
+  return {
+    type: SET_USER_TO_EDIT,
+    editUser: user
+  };
+};
+
+//  ==========Klienci==========
+
+export const createCrmClient = (
+  name,
+  nip,
+  email,
+  tel,
+  road,
+  code,
+  city,
+  comment,
+  crmKey,
+  callback
+) => dispatch => {
+  createCrmClientID(crmKey)
+    .then(clientId => {
+      firebase
+        .database()
+        .ref("crm/" + crmKey + "/klienci/" + clientId)
+        .set({
+          clientId,
+          name,
+          nip,
+          email,
+          tel,
+          road,
+          code,
+          city,
+          comment
+        })
+        .then(() => {
+          // dispatch(createSuccess(user));
+          dispatch(getCrmClients(crmKey));
+          callback();
+        })
+        .catch(error => {
+          console.log("KlientADD: ", error);
+          //TODO: Do przerobienia dispatch
+          //  dispatch(createUserFail(error));
+        });
+    })
+    .catch(error => {
+      //TODO: Do zrobieniaw wyjątek
+    });
+};
+
+const createCrmClientID = (crmKey, crypto = "") => {
+  crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+  const result = checkIfCrmClientExist(crmKey, crypto).then(result => {
+    return result;
+  });
+
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve(result);
+    }, 500);
+  });
+};
+
+const checkIfCrmClientExist = (crmKey, crypto) => {
+  return firebase
+    .database()
+    .ref("crm/" + crmKey + crypto.toString())
+    .once("value")
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        return checkIfCrmClientExist(crmKey, crypto);
+      } else {
+        return crypto;
+      }
+    });
+};
+
+export const deleteCrmClient = (crmKey, clientKey) => dispatch => {
+  firebase
+    .database()
+    .ref("crm/" + crmKey + "/klienci/" + clientKey)
+    .set(null, e => {
+      alert("Klient został usunięty!");
+      dispatch(getCrmClients(crmKey));
+    });
+};
+
+export const setClientToEdit = client => {
+  return {
+    type: SET_CLIENT_TO_EDIT,
+    editClient: client
+  };
+};
+
+export const editCrmClient = (
+  name,
+  nip,
+  email,
+  tel,
+  road,
+  code,
+  city,
+  comment,
+  crmKey,
+  clientKey,
+  callback
+) => dispatch => {
+  console.log("KlientEdit: ", clientKey);
+  firebase
+    .database()
+    .ref("crm/" + crmKey + "/klienci/" + clientKey)
+    .set({
+      name,
+      nip,
+      email,
+      tel,
+      road,
+      code,
+      city,
+      comment
+    })
+    .then(() => {
+      // dispatch(createSuccess(user));
+      dispatch(getCrmClients(crmKey));
+      callback();
+    })
+    .catch(error => {
+      console.log("ClientEdit: ", error);
+      //TODO: Do przerobienia dispatch
+      //  dispatch(createUserFail(error));
+    });
+};
+
+export const getCrmClients = crmKey => dispatch => {
+  firebase
+    .database()
+    .ref("crm/" + crmKey + "/klienci")
+    .once("value", snapshot => {
+      console.log("getCrmClientsVal: ", snapshot.val());
+      dispatch(getCrmClientsSuccess(snapshot.val()));
+    });
+};
+
+export const getCrmClientsSuccess = resp => {
+  return {
+    type: GET_CRM_CLIENTS_SUCCESS,
+    crmClients: { ...resp }
+  };
+};
+
+//  ==========Modal==========
+
 export const onModalShow = arg => {
   return {
     type: ADD_MODAL_ACTIVE,
