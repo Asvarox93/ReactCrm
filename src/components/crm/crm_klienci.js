@@ -6,7 +6,7 @@ import {
   getCrmClients,
   setClientToEdit,
   deleteCrmClient
-} from "../action/index";
+} from "../../action/index";
 import ClientsRegisterModal from "./crm_klienci_add";
 import ClientsEditModal from "./crm_klienci_edit";
 

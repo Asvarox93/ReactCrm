@@ -6,7 +6,7 @@ import {
   getCrmUsers,
   setUserToEdit,
   deleteCrmUser
-} from "../action/index";
+} from "../../action/index";
 import UserRegisterModal from "./crm_pracownicy_add";
 import UserEditModal from "./crm_pracownicy_edit";
 

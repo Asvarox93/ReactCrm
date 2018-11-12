@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { editCrmClient, onModalOff } from "../action/index";
+import { editCrmClient, onModalOff } from "../../action/index";
 
 class ClientsEditModal extends Component {
   renderField(field) {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { onSignOut } from "../action/index";
+import { onSignOut } from "../../action/index";
 
 class Crm_topbar extends Component {
   showMenuWithPrivileges(privileges) {

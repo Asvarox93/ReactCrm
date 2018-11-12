@@ -12,6 +12,8 @@ export const GET_CRM_USERS_SUCCESS = "GET_CRM_USERS_SUCCESS";
 export const SET_USER_TO_EDIT = "SET_USER_TO_EDIT";
 export const GET_CRM_CLIENTS_SUCCESS = "GET_CRM_CLIENTS_SUCCESS";
 export const SET_CLIENT_TO_EDIT = "SET_CLIENT_TO_EDIT";
+export const GET_CRM_ORDERS_SUCCESS = "GET_CRM_ORDERS_SUCCESS";
+export const SET_ORDER_TO_EDIT = "SET_ORDER_TO_EDIT";
 
 export const createUser = (email, pass, nickname, callback) => dispatch => {
   firebase
@@ -370,7 +372,7 @@ const createCrmClientID = (crmKey, crypto = "") => {
 const checkIfCrmClientExist = (crmKey, crypto) => {
   return firebase
     .database()
-    .ref("crm/" + crmKey + crypto.toString())
+    .ref("crm/" + crmKey + "/klienci/" + crypto.toString())
     .once("value")
     .then(snapshot => {
       if (snapshot.exists()) {
@@ -412,7 +414,6 @@ export const editCrmClient = (
   clientKey,
   callback
 ) => dispatch => {
-  console.log("KlientEdit: ", clientKey);
   firebase
     .database()
     .ref("crm/" + crmKey + "/klienci/" + clientKey)
@@ -452,6 +453,152 @@ export const getCrmClientsSuccess = resp => {
   return {
     type: GET_CRM_CLIENTS_SUCCESS,
     crmClients: { ...resp }
+  };
+};
+
+//  ==========Zlecenia==========
+
+export const createCrmOrder = (
+  name,
+  nip,
+  email,
+  tel,
+  road,
+  code,
+  city,
+  comment,
+  crmKey,
+  callback
+) => dispatch => {
+  createCrmOrderID(crmKey)
+    .then(clientId => {
+      firebase
+        .database()
+        .ref("crm/" + crmKey + "/zlecenia/" + clientId)
+        .set({
+          clientId,
+          name,
+          nip,
+          email,
+          tel,
+          road,
+          code,
+          city,
+          comment
+        })
+        .then(() => {
+          // dispatch(createSuccess(user));
+          dispatch(getCrmOrders(crmKey));
+          callback();
+        })
+        .catch(error => {
+          console.log("KlientADD: ", error);
+          //TODO: Do przerobienia dispatch
+          //  dispatch(createUserFail(error));
+        });
+    })
+    .catch(error => {
+      //TODO: Do zrobieniaw wyjątek
+    });
+};
+
+const createCrmOrderID = (crmKey, crypto = "") => {
+  crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+  const result = checkIfCrmOrderExist(crmKey, crypto).then(result => {
+    return result;
+  });
+
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve(result);
+    }, 500);
+  });
+};
+
+const checkIfCrmOrderExist = (crmKey, crypto) => {
+  return firebase
+    .database()
+    .ref("crm/" + crmKey + "/zlecenia/" + crypto.toString())
+    .once("value")
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        return checkIfCrmOrderExist(crmKey, crypto);
+      } else {
+        return crypto;
+      }
+    });
+};
+
+export const deleteCrmOrder = (crmKey, orderKey) => dispatch => {
+  firebase
+    .database()
+    .ref("crm/" + crmKey + "/zlecenia/" + orderKey)
+    .set(null, e => {
+      alert("Zlecenie zostało usunięte!");
+      dispatch(getCrmOrders(crmKey));
+    });
+};
+
+export const setOrderToEdit = order => {
+  return {
+    type: SET_ORDER_TO_EDIT,
+    editOrder: order
+  };
+};
+
+export const editCrmOrder = (
+  name,
+  nip,
+  email,
+  tel,
+  road,
+  code,
+  city,
+  comment,
+  crmKey,
+  clientKey,
+  callback
+) => dispatch => {
+  firebase
+    .database()
+    .ref("crm/" + crmKey + "/zlecenia/" + clientKey)
+    .set({
+      name,
+      nip,
+      email,
+      tel,
+      road,
+      code,
+      city,
+      comment
+    })
+    .then(() => {
+      // dispatch(createSuccess(user));
+      dispatch(getCrmOrders(crmKey));
+      callback();
+    })
+    .catch(error => {
+      console.log("ClientEdit: ", error);
+      //TODO: Do przerobienia dispatch
+      //  dispatch(createUserFail(error));
+    });
+};
+
+export const getCrmOrders = crmKey => dispatch => {
+  firebase
+    .database()
+    .ref("crm/" + crmKey + "/zlecenia")
+    .once("value", snapshot => {
+      console.log("getCrmOrdersVal: ", snapshot.val());
+      dispatch(getCrmOrdersSuccess(snapshot.val()));
+    });
+};
+
+export const getCrmOrdersSuccess = resp => {
+  return {
+    type: GET_CRM_ORDERS_SUCCESS,
+    crmOrders: { ...resp }
   };
 };
 

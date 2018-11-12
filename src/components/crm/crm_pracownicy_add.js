@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { createCrmClient, onModalOff } from "../action/index";
+import { createCrmUser, onModalOff } from "../../action/index";
 
-class ClientsRegisterModal extends Component {
+class UserRegisterModal extends Component {
   renderField(field) {
     return (
       <div className="auth__field">
@@ -18,23 +18,26 @@ class ClientsRegisterModal extends Component {
   }
 
   onFormSubmit(e) {
-    const { name, nip, email, tel, road, code, city, comment } = e;
+    const email = e.email;
+    const password = e.password;
+    const nickname = e.nickname;
+    const privileges = {
+      pracownicy: e.pracownicy ? e.pracownicy : false,
+      zlecenia: e.zlecenia ? e.zlecenia : false,
+      klienci: e.klienci ? e.klienci : false
+    };
     const { crmKey } = this.props;
 
-    if (this.props.privileges.klienci) {
-      this.props.createCrmClient(
-        name,
-        nip,
+    if (this.props.privileges.pracownicy) {
+      this.props.createCrmUser(
         email,
-        tel,
-        road,
-        code,
-        city,
-        comment,
+        password,
+        nickname,
+        privileges,
         crmKey,
         () => {
-          this.closeClientModal();
-          alert("Klient został dodany");
+          this.closeRegisterModal();
+          alert("Pracownik dodany");
         }
       );
     } else {
@@ -42,34 +45,31 @@ class ClientsRegisterModal extends Component {
     }
   }
 
-  closeClientModal() {
+  closeRegisterModal() {
     this.props.onModalOff();
   }
 
   render() {
     const { privileges, handleSubmit } = this.props;
+    console.log("DODAWANIE");
 
-    if (privileges.klienci === true) {
+    if (privileges.pracownicy === true) {
       return (
         <div className="formModal">
-          <div>Formularz dodawania klienta:</div>
+          <div>Formularz dodawania pracownika:</div>
 
           <form
             onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
             className="auth__form"
           >
-            <h2 className="auth__title">Formularz dodawania nowego klienta</h2>
+            <h2 className="auth__title">
+              Formularz dodawania nowego pracownika
+            </h2>
             {this.props.authRegisterError}
             <Field
               type="text"
-              label="Nazwa klienta"
-              name="name"
-              component={this.renderField}
-            />
-            <Field
-              type="text"
-              label="NIP"
-              name="nip"
+              label="Imie i nazwisko"
+              name="nickname"
               component={this.renderField}
             />
             <Field
@@ -79,39 +79,35 @@ class ClientsRegisterModal extends Component {
               component={this.renderField}
             />
             <Field
-              type="text"
-              label="Telefon"
-              name="tel"
+              type="password"
+              label="Password"
+              name="password"
               component={this.renderField}
+            />
+            <h3>Uprawnienia:</h3>
+            <Field
+              name="klienci"
+              label="klienci"
+              component={this.renderField}
+              type="checkbox"
             />
             <Field
-              type="text"
-              label="Ulica"
-              name="road"
+              name="zlecenia"
+              label="zlecenia"
               component={this.renderField}
+              type="checkbox"
             />
             <Field
-              type="text"
-              label="Kod pocztowy"
-              name="code"
+              name="pracownicy"
+              label="pracownicy"
               component={this.renderField}
+              type="checkbox"
             />
-            <Field
-              type="text"
-              label="Miasto"
-              name="city"
-              component={this.renderField}
-            />
-            <Field
-              type="text"
-              label="Uwagi"
-              name="comment"
-              component={this.renderField}
-            />
+
             <button className="auth__submit">Dodaj</button>
             <button
               type="button"
-              onClick={this.closeClientModal.bind(this)}
+              onClick={this.closeRegisterModal.bind(this)}
               className="panel__btn panel__btn--return"
             >
               Zamknij
@@ -146,16 +142,17 @@ const mapStateToProps = state => {
   return {
     authRegisterError: state.auth.authRegisterError,
     crmKey: state.auth.auth.crmKey,
+    role: state.auth.auth.role,
     privileges: state.auth.auth.privileges
   };
 };
 
 export default reduxForm({
   validate,
-  form: "authClientAddForm"
+  form: "authUserForm"
 })(
   connect(
     mapStateToProps,
-    { createCrmClient, onModalOff }
-  )(ClientsRegisterModal)
+    { createCrmUser, onModalOff }
+  )(UserRegisterModal)
 );

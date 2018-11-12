@@ -11,7 +11,7 @@ import reducers, { initialState } from "./reducers";
 
 import App from "./components/app";
 import Auth from "./components/auth";
-import Crm_panel from "./components/crm_panel";
+import Crm_panel from "./components/crm/crm_panel";
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
