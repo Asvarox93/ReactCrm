@@ -459,32 +459,25 @@ export const getCrmClientsSuccess = resp => {
 //  ==========Zlecenia==========
 
 export const createCrmOrder = (
-  name,
-  nip,
-  email,
-  tel,
-  road,
-  code,
-  city,
-  comment,
+  client,
+  addedDate,
+  orderNote,
+  status,
+  worker,
   crmKey,
   callback
 ) => dispatch => {
   createCrmOrderID(crmKey)
-    .then(clientId => {
+    .then(orderId => {
       firebase
         .database()
-        .ref("crm/" + crmKey + "/zlecenia/" + clientId)
+        .ref("crm/" + crmKey + "/zlecenia/" + orderId)
         .set({
-          clientId,
-          name,
-          nip,
-          email,
-          tel,
-          road,
-          code,
-          city,
-          comment
+          client,
+          addedDate,
+          orderNote,
+          status,
+          worker
         })
         .then(() => {
           // dispatch(createSuccess(user));
@@ -492,7 +485,7 @@ export const createCrmOrder = (
           callback();
         })
         .catch(error => {
-          console.log("KlientADD: ", error);
+          console.log("OrderADD: ", error);
           //TODO: Do przerobienia dispatch
           //  dispatch(createUserFail(error));
         });
