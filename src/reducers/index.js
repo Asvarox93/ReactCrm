@@ -32,7 +32,9 @@ const initialState = {
     crmClients: "",
     editClient: "",
     crmOrders: "",
-    editOrder: ""
+    editOrder: {
+      history: ""
+    }
   },
   form: formReducer
 };

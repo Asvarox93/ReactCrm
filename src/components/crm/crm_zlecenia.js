@@ -1,21 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import _ from "lodash";
 import {
   onModalShow,
   getCrmOrders,
   setOrderToEdit,
-  deleteCrmOrder
+  closeCrmOrder
 } from "../../action/index";
 import OrderRegisterModal from "./crm_zlecenia_add";
 import OrderEditModal from "./crm_zlecenia_edit";
+import OrderHistoryModal from "./crm_zlecenia_history";
 
 class Zlecenia extends Component {
-  onButtonClick(arg, client = "", uid = "") {
+  onButtonClick(arg, order = "", uid = "") {
     this.props.onModalShow(arg);
 
-    if (client) {
-      const val = { client, uid };
+    if (order) {
+      const val = { order, uid };
       this.props.setOrderToEdit(val);
     }
   }
@@ -29,12 +31,16 @@ class Zlecenia extends Component {
       console.log("EDIT");
       return <OrderEditModal />;
     }
+    if (modal.active && modal.type === "HISTORY") {
+      console.log("HISTORY");
+      return <OrderHistoryModal />;
+    }
     return;
   }
 
-  deteleCrmOrder(orderKey) {
+  closeCrmOrder(orderKey) {
     const { crmKey } = this.props;
-    this.props.deleteCrmOrder(crmKey, orderKey);
+    this.props.closeCrmOrder(crmKey, orderKey);
   }
 
   showAddedOrders(crmOrders) {
@@ -43,6 +49,42 @@ class Zlecenia extends Component {
     const listItems = Object.entries(crmOrders).map(([key, value]) => {
       number++;
 
+      if (value.status !== "zamknięte") {
+        return (
+          <tr key={key} date={value.addedDate}>
+            <td className="crm__table__th">{number}</td>
+            <td className="crm__table__th">{value.client}</td>
+            <td className="crm__table__th">{value.addedDate}</td>
+            <td className="crm__table__th">{value.orderNote}</td>
+            <td className="crm__table__th">{value.status}</td>
+            <td className="crm__table__th">{value.worker}</td>
+            <td>
+              <button
+                className="auth__submit"
+                onClick={() => this.onButtonClick("EDIT", value, key)}
+              >
+                Edytuj
+              </button>
+            </td>
+            <td>
+              <button
+                className="auth__submit"
+                onClick={() => this.onButtonClick("HISTORY", value, key)}
+              >
+                Działania
+              </button>
+            </td>
+            <td>
+              <button
+                className="auth__submit"
+                onClick={() => this.closeCrmOrder(key)}
+              >
+                Zamknij
+              </button>
+            </td>
+          </tr>
+        );
+      }
       return (
         <tr key={key}>
           <td className="crm__table__th">{number}</td>
@@ -56,15 +98,7 @@ class Zlecenia extends Component {
               className="auth__submit"
               onClick={() => this.onButtonClick("EDIT", value, key)}
             >
-              Edytuj
-            </button>
-          </td>
-          <td>
-            <button
-              className="auth__submit"
-              onClick={() => this.deteleCrmOrder(key)}
-            >
-              Usuń
+              Działania
             </button>
           </td>
         </tr>
@@ -100,7 +134,13 @@ class Zlecenia extends Component {
                 <th className="crm__table__th">Pracownik</th>
               </tr>
             </thead>
-            <tbody>{this.showAddedOrders(crmOrders)}</tbody>
+            <tbody>
+              {_.orderBy(
+                this.showAddedOrders(crmOrders),
+                ["props.date"],
+                ["asc"]
+              )}
+            </tbody>
           </table>
 
           {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
@@ -137,5 +177,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { onModalShow, getCrmOrders, setOrderToEdit, deleteCrmOrder }
+  { onModalShow, getCrmOrders, setOrderToEdit, closeCrmOrder }
 )(Zlecenia);

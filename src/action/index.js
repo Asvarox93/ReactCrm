@@ -523,12 +523,15 @@ const checkIfCrmOrderExist = (crmKey, crypto) => {
     });
 };
 
-export const deleteCrmOrder = (crmKey, orderKey) => dispatch => {
+export const closeCrmOrder = (crmKey, orderKey) => dispatch => {
   firebase
     .database()
     .ref("crm/" + crmKey + "/zlecenia/" + orderKey)
-    .set(null, e => {
-      alert("Zlecenie zostało usunięte!");
+    .update({
+      status: "zamknięte"
+    })
+    .then(() => {
+      alert("Zlecenie zostało zamknięte!");
       dispatch(getCrmOrders(crmKey));
     });
 };
@@ -541,30 +544,20 @@ export const setOrderToEdit = order => {
 };
 
 export const editCrmOrder = (
-  name,
-  nip,
-  email,
-  tel,
-  road,
-  code,
-  city,
-  comment,
+  orderNote,
+  status,
+  worker,
+  orderKey,
   crmKey,
-  clientKey,
   callback
 ) => dispatch => {
   firebase
     .database()
-    .ref("crm/" + crmKey + "/zlecenia/" + clientKey)
-    .set({
-      name,
-      nip,
-      email,
-      tel,
-      road,
-      code,
-      city,
-      comment
+    .ref("crm/" + crmKey + "/zlecenia/" + orderKey)
+    .update({
+      orderNote,
+      status,
+      worker
     })
     .then(() => {
       // dispatch(createSuccess(user));
@@ -572,9 +565,78 @@ export const editCrmOrder = (
       callback();
     })
     .catch(error => {
-      console.log("ClientEdit: ", error);
+      console.log("OrderEdit: ", error);
       //TODO: Do przerobienia dispatch
       //  dispatch(createUserFail(error));
+    });
+};
+
+export const historyCrmOrder = (
+  history,
+  orderKey,
+  crmKey,
+  callback
+) => dispatch => {
+  const user = firebase.auth().currentUser;
+  createCrmOrderHistoryID(crmKey, orderKey).then(historyId => {
+    firebase
+      .database()
+      .ref("crm/" + crmKey + "/zlecenia/" + orderKey + "/history/" + historyId)
+      .set({
+        user: user.displayName,
+        date: new Date()
+          .toJSON()
+          .slice(0, 10)
+          .replace(/-/g, "/"),
+        history
+      })
+      .then(() => {
+        // dispatch(createSuccess(user));
+        dispatch(getCrmOrders(crmKey));
+        callback();
+      })
+      .catch(error => {
+        console.log("OrderEdit: ", error);
+        //TODO: Do przerobienia dispatch
+        //  dispatch(createUserFail(error));
+      });
+  });
+};
+
+const createCrmOrderHistoryID = (crmKey, orderKey, crypto = "") => {
+  crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+  const result = checkIfCrmOrderHistoryExist(crmKey, orderKey, crypto).then(
+    result => {
+      return result;
+    }
+  );
+
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve(result);
+    }, 500);
+  });
+};
+
+const checkIfCrmOrderHistoryExist = (crmKey, orderKey, crypto) => {
+  return firebase
+    .database()
+    .ref(
+      "crm/" +
+        crmKey +
+        "/zlecenia/" +
+        orderKey +
+        "/history/" +
+        crypto.toString()
+    )
+    .once("value")
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        return checkIfCrmOrderHistoryExist(crmKey, orderKey, crypto);
+      } else {
+        return crypto;
+      }
     });
 };
 
