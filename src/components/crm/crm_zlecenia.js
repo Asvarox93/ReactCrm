@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import _ from "lodash";
 import {
   onModalShow,
   getCrmOrders,
   setOrderToEdit,
-  closeCrmOrder
+  closeCrmOrder,
+  getCrmOrdersByDataFilter
 } from "../../action/index";
 import OrderRegisterModal from "./crm_zlecenia_add";
 import OrderEditModal from "./crm_zlecenia_edit";
@@ -41,6 +41,11 @@ class Zlecenia extends Component {
   closeCrmOrder(orderKey) {
     const { crmKey } = this.props;
     this.props.closeCrmOrder(crmKey, orderKey);
+  }
+
+  onDataFilterChange(filter) {
+    const { crmOrders } = this.props;
+    this.props.getCrmOrdersByDataFilter(crmOrders, filter);
   }
 
   showAddedOrders(crmOrders) {
@@ -96,7 +101,7 @@ class Zlecenia extends Component {
           <td>
             <button
               className="auth__submit"
-              onClick={() => this.onButtonClick("EDIT", value, key)}
+              onClick={() => this.onButtonClick("HISTORY", value, key)}
             >
               Działania
             </button>
@@ -111,7 +116,7 @@ class Zlecenia extends Component {
   render() {
     const { privileges, modalActive, crmOrders } = this.props;
 
-    if (privileges.pracownicy === true) {
+    if (privileges.zlecenia === true) {
       return (
         <div>
           {this.showOrdersModal(modalActive)}
@@ -128,19 +133,19 @@ class Zlecenia extends Component {
               <tr>
                 <th className="crm__table__th">LP</th>
                 <th className="crm__table__th">Nazwa klienta</th>
-                <th className="crm__table__th">Data dodania</th>
+                <th className="crm__table__th">
+                  Data dodania{" "}
+                  <span onClick={() => this.onDataFilterChange("desc")}>
+                    /\
+                  </span>
+                  <span onClick={() => this.onDataFilterChange("asc")}>\/</span>
+                </th>
                 <th className="crm__table__th">Treść zlecenia</th>
                 <th className="crm__table__th">Status</th>
                 <th className="crm__table__th">Pracownik</th>
               </tr>
             </thead>
-            <tbody>
-              {_.orderBy(
-                this.showAddedOrders(crmOrders),
-                ["props.date"],
-                ["asc"]
-              )}
-            </tbody>
+            <tbody>{this.showAddedOrders(crmOrders)}</tbody>
           </table>
 
           {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
@@ -177,5 +182,11 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { onModalShow, getCrmOrders, setOrderToEdit, closeCrmOrder }
+  {
+    onModalShow,
+    getCrmOrders,
+    setOrderToEdit,
+    closeCrmOrder,
+    getCrmOrdersByDataFilter
+  }
 )(Zlecenia);

@@ -77,7 +77,7 @@ class OrderRegisterModal extends Component {
   }
 
   render() {
-    const { privileges, handleSubmit, crmClients, crmUsers } = this.props;
+    const { privileges, handleSubmit, crmUsers } = this.props;
     const statusOption = ["Przyjęte", "Realizacja", "Oczekuje", "Zakończone"];
 
     if (privileges.zlecenia === true) {

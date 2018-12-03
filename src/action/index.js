@@ -1,5 +1,6 @@
 import * as firebase from "firebase";
 import axios from "axios";
+import _ from "lodash";
 
 export const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS";
 export const CREATE_USER_FAIL = "CREATE_USER_FAIL";
@@ -645,9 +646,25 @@ export const getCrmOrders = crmKey => dispatch => {
     .database()
     .ref("crm/" + crmKey + "/zlecenia")
     .once("value", snapshot => {
-      console.log("getCrmOrdersVal: ", snapshot.val());
-      dispatch(getCrmOrdersSuccess(snapshot.val()));
+      let arr = Object.entries(snapshot.val()).map(e =>
+        Object.assign(e[1], { key: e[0] })
+      );
+      const orderFilter = _.orderBy(arr, ["addedDate"], ["desc"]);
+      dispatch(getCrmOrdersSuccess(orderFilter));
     });
+};
+
+export const getCrmOrdersByDataFilter = (crmOrders, filter) => dispatch => {
+  let orderFilter = "";
+
+  if (filter === "asc") {
+    orderFilter = _.orderBy(crmOrders, ["addedDate"], ["asc"]);
+  }
+  if (filter === "desc") {
+    orderFilter = _.orderBy(crmOrders, ["addedDate"], ["desc"]);
+  }
+
+  dispatch(getCrmOrdersSuccess(orderFilter));
 };
 
 export const getCrmOrdersSuccess = resp => {
