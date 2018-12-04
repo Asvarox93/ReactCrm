@@ -4,7 +4,9 @@ import {
   GET_CRM_CLIENTS_SUCCESS,
   SET_CLIENT_TO_EDIT,
   GET_CRM_ORDERS_SUCCESS,
-  SET_ORDER_TO_EDIT
+  SET_ORDER_TO_EDIT,
+  HIDE_CLOSED_ORDER_TOGGLE,
+  SEARCH_ORDER
 } from "../action/index";
 
 const fetchTable = (state = [], action) => {
@@ -27,6 +29,12 @@ const fetchTable = (state = [], action) => {
     case SET_ORDER_TO_EDIT:
       const editOrder = action.editOrder;
       return { ...state, editOrder };
+    case HIDE_CLOSED_ORDER_TOGGLE:
+      const hideClosedOrders = action.hideClosedOrders;
+      return { ...state, hideClosedOrders };
+    case SEARCH_ORDER:
+      const searchOrders = action.searchOrders;
+      return { ...state, searchOrders };
     default:
       return state;
   }

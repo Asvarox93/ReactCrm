@@ -15,6 +15,8 @@ export const GET_CRM_CLIENTS_SUCCESS = "GET_CRM_CLIENTS_SUCCESS";
 export const SET_CLIENT_TO_EDIT = "SET_CLIENT_TO_EDIT";
 export const GET_CRM_ORDERS_SUCCESS = "GET_CRM_ORDERS_SUCCESS";
 export const SET_ORDER_TO_EDIT = "SET_ORDER_TO_EDIT";
+export const HIDE_CLOSED_ORDER_TOGGLE = "HIDE_CLOSED_ORDER_TOGGLE";
+export const SEARCH_ORDER = "SEARCH_ORDER";
 
 export const createUser = (email, pass, nickname, callback) => dispatch => {
   firebase
@@ -671,6 +673,20 @@ export const getCrmOrdersSuccess = resp => {
   return {
     type: GET_CRM_ORDERS_SUCCESS,
     crmOrders: { ...resp }
+  };
+};
+
+export const searchOrdersByClients = arg => {
+  return {
+    type: SEARCH_ORDER,
+    searchOrders: arg
+  };
+};
+
+export const hideClosedOrders = arg => {
+  return {
+    type: HIDE_CLOSED_ORDER_TOGGLE,
+    hideClosedOrders: arg
   };
 };
 

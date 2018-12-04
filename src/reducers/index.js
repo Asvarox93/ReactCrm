@@ -32,6 +32,8 @@ const initialState = {
     crmClients: "",
     editClient: "",
     crmOrders: "",
+    searchOrders: "",
+    hideClosedOrders: false,
     editOrder: {
       history: ""
     }
