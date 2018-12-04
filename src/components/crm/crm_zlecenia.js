@@ -125,12 +125,14 @@ class Zlecenia extends Component {
 
     if (searchOrders) {
       listItems = listItems.filter(item => {
-        return (
-          item.props.client
-            .toString()
-            .toLowerCase()
-            .search(searchOrders.toString().toLowerCase()) !== -1
-        );
+        if (item !== null) {
+          return (
+            item.props.client
+              .toString()
+              .toLowerCase()
+              .search(searchOrders.toString().toLowerCase()) !== -1
+          );
+        }
       });
     }
 
