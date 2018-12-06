@@ -6,6 +6,8 @@ import Zlecenia from "./crm_zlecenia";
 import Dashboard from "./crm_dashboard";
 import Klienci from "./crm_klienci";
 import Pracownicy from "./crm_pracownicy";
+import Korespondencja from "./crm_korespondencja";
+import Umowy from "./crm_umowy";
 
 class Crm_panel extends Component {
   render() {
@@ -29,6 +31,8 @@ class Crm_panel extends Component {
             <Route path="/crm/zlecenia" component={Zlecenia} />
             <Route path="/crm/klienci" component={Klienci} />
             <Route path="/crm/pracownicy" component={Pracownicy} />
+            <Route path="/crm/korespondencja" component={Korespondencja} />
+            <Route path="/crm/umowy" component={Umowy} />
           </Switch>
         </div>
       );

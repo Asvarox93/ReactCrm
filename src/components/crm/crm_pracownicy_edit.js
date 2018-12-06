@@ -45,7 +45,9 @@ class UserEditModal extends Component {
     const privileges = {
       pracownicy: e.pracownicy ? e.pracownicy : false,
       zlecenia: e.zlecenia ? e.zlecenia : false,
-      klienci: e.klienci ? e.klienci : false
+      klienci: e.klienci ? e.klienci : false,
+      korespondencja: e.korespondencja ? e.korespondencja : false,
+      umowy: e.umowy ? e.umowy : false
     };
     const { crmKey } = this.props;
     const { uid: userUid } = this.props.editUser;
@@ -114,6 +116,18 @@ class UserEditModal extends Component {
             <Field
               name="pracownicy"
               label="pracownicy"
+              type="checkbox"
+              component={this.renderField}
+            />
+            <Field
+              name="korespondencja"
+              label="korespondencja"
+              type="checkbox"
+              component={this.renderField}
+            />
+            <Field
+              name="umowy"
+              label="umowy"
               type="checkbox"
               component={this.renderField}
             />

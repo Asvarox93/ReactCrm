@@ -52,7 +52,7 @@ class Zlecenia extends Component {
     this.props.getCrmOrdersByDataFilter(crmOrders, filter);
   }
 
-  seatchOrders(e) {
+  searchOrders(e) {
     const filter = e.target.value;
     this.props.searchOrdersByClients(filter);
   }
@@ -133,6 +133,7 @@ class Zlecenia extends Component {
               .search(searchOrders.toString().toLowerCase()) !== -1
           );
         }
+        return undefined;
       });
     }
 
@@ -156,7 +157,7 @@ class Zlecenia extends Component {
           <input
             type="text"
             value={searchOrders}
-            onChange={this.seatchOrders.bind(this)}
+            onChange={this.searchOrders.bind(this)}
           />
           <button
             className="auth__submit"

@@ -5,7 +5,8 @@ import {
   onModalShow,
   getCrmUsers,
   setUserToEdit,
-  deleteCrmUser
+  deleteCrmUser,
+  searchWorkerByName
 } from "../../action/index";
 import UserRegisterModal from "./crm_pracownicy_add";
 import UserEditModal from "./crm_pracownicy_edit";
@@ -46,14 +47,20 @@ class Pracownicy extends Component {
     this.props.deleteCrmUser(key, crmKey);
   }
 
+  searchWorkers(e) {
+    const filter = e.target.value;
+    this.props.searchWorkerByName(filter);
+  }
+
   showAddedUsers(crmUsers) {
     let number = 0;
+    let { searchWorkers } = this.props;
 
-    const listItems = Object.entries(crmUsers).map(([key, value]) => {
+    let listItems = Object.entries(crmUsers).map(([key, value]) => {
       number++;
 
       return (
-        <tr key={key}>
+        <tr key={key} worker={value.username}>
           <td className="crm__table__th">{number}</td>
           <td className="crm__table__th">{value.username}</td>
           <td className="crm__table__th">{value.email}</td>
@@ -63,6 +70,11 @@ class Pracownicy extends Component {
               <li>Klienci: {value.privileges.klienci ? "Tak" : "Nie"}</li>
               <li>Pracownicy: {value.privileges.pracownicy ? "Tak" : "Nie"}</li>
               <li>Zlecenia: {value.privileges.zlecenia ? "Tak" : "Nie"}</li>
+              <li>
+                Korespondencja:
+                {value.privileges.korespondencja ? "Tak" : "Nie"}
+              </li>
+              <li>Umowy: {value.privileges.umowy ? "Tak" : "Nie"}</li>
             </ul>
           </td>
           <td>
@@ -85,17 +97,33 @@ class Pracownicy extends Component {
       );
     });
 
+    if (searchWorkers) {
+      listItems = listItems.filter(item => {
+        return (
+          item.props.worker
+            .toString()
+            .toLowerCase()
+            .search(searchWorkers.toString().toLowerCase()) !== -1
+        );
+      });
+    }
+
     return listItems;
   }
 
   render() {
-    const { privileges, modalActive, crmUsers } = this.props;
+    const { privileges, modalActive, crmUsers, searchWorkers } = this.props;
 
     if (privileges.pracownicy === true) {
       return (
         <div>
           {this.showUserRegesterModal(modalActive)}
           <div>Dane do wyświetlenia pracowników:</div>
+          <input
+            type="text"
+            value={searchWorkers}
+            onChange={this.searchWorkers.bind(this)}
+          />
           <button
             className="auth__submit"
             onClick={() => this.onButtonClick("ADD")}
@@ -144,11 +172,12 @@ const mapStateToProps = state => {
     modalActive: state.modal,
     privileges: state.auth.auth.privileges,
     crmKey: state.auth.auth.crmKey,
-    crmUsers: state.fetchTable.crmUsers
+    crmUsers: state.fetchTable.crmUsers,
+    searchWorkers: state.fetchTable.searchWorkers
   };
 };
 
 export default connect(
   mapStateToProps,
-  { onModalShow, getCrmUsers, setUserToEdit, deleteCrmUser }
+  { onModalShow, getCrmUsers, setUserToEdit, deleteCrmUser, searchWorkerByName }
 )(Pracownicy);

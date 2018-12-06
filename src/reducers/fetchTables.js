@@ -6,7 +6,9 @@ import {
   GET_CRM_ORDERS_SUCCESS,
   SET_ORDER_TO_EDIT,
   HIDE_CLOSED_ORDER_TOGGLE,
-  SEARCH_ORDER
+  SEARCH_ORDER,
+  SEARCH_CLIENT,
+  SEARCH_WORKER
 } from "../action/index";
 
 const fetchTable = (state = [], action) => {
@@ -35,6 +37,12 @@ const fetchTable = (state = [], action) => {
     case SEARCH_ORDER:
       const searchOrders = action.searchOrders;
       return { ...state, searchOrders };
+    case SEARCH_CLIENT:
+      const searchClients = action.searchClients;
+      return { ...state, searchClients };
+    case SEARCH_WORKER:
+      const searchWorkers = action.searchWorkers;
+      return { ...state, searchWorkers };
     default:
       return state;
   }

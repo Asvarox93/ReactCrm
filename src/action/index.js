@@ -17,6 +17,8 @@ export const GET_CRM_ORDERS_SUCCESS = "GET_CRM_ORDERS_SUCCESS";
 export const SET_ORDER_TO_EDIT = "SET_ORDER_TO_EDIT";
 export const HIDE_CLOSED_ORDER_TOGGLE = "HIDE_CLOSED_ORDER_TOGGLE";
 export const SEARCH_ORDER = "SEARCH_ORDER";
+export const SEARCH_CLIENT = "SEARCH_CLIENT";
+export const SEARCH_WORKER = "SEARCH_WORKER";
 
 export const createUser = (email, pass, nickname, callback) => dispatch => {
   firebase
@@ -254,7 +256,9 @@ export const editCrmUser = (
         dashboard: true,
         klienci: privileges.klienci,
         pracownicy: privileges.pracownicy,
-        zlecenia: privileges.zlecenia
+        zlecenia: privileges.zlecenia,
+        korespondencja: privileges.korespondencja,
+        umowy: privileges.umowy
       }
     })
     .then(() => {
@@ -294,7 +298,6 @@ export const getCrmUsers = crm => dispatch => {
     .orderByChild("crmKey")
     .equalTo(crm)
     .once("value", snapshot => {
-      console.log("getCrmUsersVal: ", snapshot.val());
       dispatch(getCrmUsersSuccess(snapshot.val()));
     });
 };
@@ -680,6 +683,20 @@ export const searchOrdersByClients = arg => {
   return {
     type: SEARCH_ORDER,
     searchOrders: arg
+  };
+};
+
+export const searchClientByName = arg => {
+  return {
+    type: SEARCH_CLIENT,
+    searchClients: arg
+  };
+};
+
+export const searchWorkerByName = arg => {
+  return {
+    type: SEARCH_WORKER,
+    searchWorkers: arg
   };
 };
 

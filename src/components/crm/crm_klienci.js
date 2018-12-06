@@ -5,7 +5,8 @@ import {
   onModalShow,
   getCrmClients,
   setClientToEdit,
-  deleteCrmClient
+  deleteCrmClient,
+  searchClientByName
 } from "../../action/index";
 import ClientsRegisterModal from "./crm_klienci_add";
 import ClientsEditModal from "./crm_klienci_edit";
@@ -35,13 +36,20 @@ class Klienci extends Component {
     this.props.deleteCrmClient(crmKey, clientKey);
   }
 
+  searchClients(e) {
+    const filter = e.target.value;
+    this.props.searchClientByName(filter);
+  }
+
   showAddedClients(crmClients) {
     let number = 0;
+    let { searchClients } = this.props;
 
-    const listItems = Object.entries(crmClients).map(([key, value]) => {
+    let listItems = Object.entries(crmClients).map(([key, value]) => {
       number++;
+
       return (
-        <tr key={key}>
+        <tr key={key} name={value.name}>
           <td className="crm__table__th">{number}</td>
           <td className="crm__table__th">{value.name}</td>
           <td className="crm__table__th">{value.nip}</td>
@@ -79,17 +87,33 @@ class Klienci extends Component {
       );
     });
 
+    if (searchClients) {
+      listItems = listItems.filter(item => {
+        return (
+          item.props.name
+            .toString()
+            .toLowerCase()
+            .search(searchClients.toString().toLowerCase()) !== -1
+        );
+      });
+    }
+
     return listItems;
   }
 
   render() {
-    const { privileges, modalActive, crmClients } = this.props;
+    const { privileges, modalActive, crmClients, searchClients } = this.props;
 
     if (privileges.klienci === true) {
       return (
         <div>
           {this.showClientsModal(modalActive)}
           <div>Dane do wyświetlenia klientów:</div>
+          <input
+            type="text"
+            value={searchClients}
+            onChange={this.searchClients.bind(this)}
+          />
           <button
             className="auth__submit"
             onClick={() => this.onButtonClick("ADD")}
@@ -143,11 +167,18 @@ const mapStateToProps = state => {
     modalActive: state.modal,
     privileges: state.auth.auth.privileges,
     crmKey: state.auth.auth.crmKey,
-    crmClients: state.fetchTable.crmClients
+    crmClients: state.fetchTable.crmClients,
+    searchClients: state.fetchTable.searchClients
   };
 };
 
 export default connect(
   mapStateToProps,
-  { onModalShow, getCrmClients, setClientToEdit, deleteCrmClient }
+  {
+    onModalShow,
+    getCrmClients,
+    setClientToEdit,
+    deleteCrmClient,
+    searchClientByName
+  }
 )(Klienci);

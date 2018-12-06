@@ -24,7 +24,9 @@ class UserRegisterModal extends Component {
     const privileges = {
       pracownicy: e.pracownicy ? e.pracownicy : false,
       zlecenia: e.zlecenia ? e.zlecenia : false,
-      klienci: e.klienci ? e.klienci : false
+      klienci: e.klienci ? e.klienci : false,
+      korespondencja: e.korespondencja ? e.korespondencja : false,
+      umowy: e.umowy ? e.umowy : false
     };
     const { crmKey } = this.props;
 
@@ -103,7 +105,18 @@ class UserRegisterModal extends Component {
               component={this.renderField}
               type="checkbox"
             />
-
+            <Field
+              name="korespondencja"
+              label="korespondencja"
+              type="checkbox"
+              component={this.renderField}
+            />
+            <Field
+              name="umowy"
+              label="umowy"
+              type="checkbox"
+              component={this.renderField}
+            />
             <button className="auth__submit">Dodaj</button>
             <button
               type="button"

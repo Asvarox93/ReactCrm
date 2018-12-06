@@ -22,7 +22,9 @@ const initialState = {
         dashboard: false,
         klienci: false,
         pracownicy: false,
-        zlecenia: false
+        zlecenia: false,
+        korespondencja: false,
+        umowy: false
       }
     }
   },
@@ -33,6 +35,8 @@ const initialState = {
     editClient: "",
     crmOrders: "",
     searchOrders: "",
+    searchClients: "",
+    searchWorkers: "",
     hideClosedOrders: false,
     editOrder: {
       history: ""
