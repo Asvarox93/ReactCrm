@@ -34,9 +34,12 @@ const initialState = {
     crmClients: "",
     editClient: "",
     crmOrders: "",
+    crmMails: "",
+    editMail: "",
     searchOrders: "",
     searchClients: "",
     searchWorkers: "",
+    searchMails: "",
     hideClosedOrders: false,
     editOrder: {
       history: ""

@@ -16,9 +16,12 @@ export const SET_CLIENT_TO_EDIT = "SET_CLIENT_TO_EDIT";
 export const GET_CRM_ORDERS_SUCCESS = "GET_CRM_ORDERS_SUCCESS";
 export const SET_ORDER_TO_EDIT = "SET_ORDER_TO_EDIT";
 export const HIDE_CLOSED_ORDER_TOGGLE = "HIDE_CLOSED_ORDER_TOGGLE";
+export const GET_CRM_MAILS_SUCCESS = "GET_CRM_MAILS_SUCCESS";
+export const SET_MAIL_TO_EDIT = "SET_MAIL_TO_EDIT";
 export const SEARCH_ORDER = "SEARCH_ORDER";
 export const SEARCH_CLIENT = "SEARCH_CLIENT";
 export const SEARCH_WORKER = "SEARCH_WORKER";
+export const SEARCH_MAILS = "SEARCH_MAILS";
 
 export const createUser = (email, pass, nickname, callback) => dispatch => {
   firebase
@@ -316,6 +319,13 @@ export const setUserToEdit = user => {
   };
 };
 
+export const searchWorkerByName = arg => {
+  return {
+    type: SEARCH_WORKER,
+    searchWorkers: arg
+  };
+};
+
 //  ==========Klienci==========
 
 export const createCrmClient = (
@@ -459,6 +469,13 @@ export const getCrmClientsSuccess = resp => {
   return {
     type: GET_CRM_CLIENTS_SUCCESS,
     crmClients: { ...resp }
+  };
+};
+
+export const searchClientByName = arg => {
+  return {
+    type: SEARCH_CLIENT,
+    searchClients: arg
   };
 };
 
@@ -686,24 +703,153 @@ export const searchOrdersByClients = arg => {
   };
 };
 
-export const searchClientByName = arg => {
-  return {
-    type: SEARCH_CLIENT,
-    searchClients: arg
-  };
-};
-
-export const searchWorkerByName = arg => {
-  return {
-    type: SEARCH_WORKER,
-    searchWorkers: arg
-  };
-};
-
 export const hideClosedOrders = arg => {
   return {
     type: HIDE_CLOSED_ORDER_TOGGLE,
     hideClosedOrders: arg
+  };
+};
+
+// ==========Korespondencja==========
+export const createCrmMail = (
+  name,
+  concern,
+  type,
+  form,
+  comment,
+  file,
+  city,
+  crmKey,
+  callback
+) => dispatch => {
+  createCrmMailID(crmKey)
+    .then(mailId => {
+      firebase
+        .database()
+        .ref("crm/" + crmKey + "/korespondencja/" + mailId)
+        .set({
+          mailId,
+          name,
+          concern,
+          type,
+          form,
+          comment,
+          file
+        })
+        .then(() => {
+          // dispatch(createSuccess(user));
+          dispatch(getCrmMails(crmKey));
+          callback();
+        })
+        .catch(error => {
+          console.log("mailADD: ", error);
+          //TODO: Do przerobienia dispatch
+          //  dispatch(createUserFail(error));
+        });
+    })
+    .catch(error => {
+      //TODO: Do zrobieniaw wyjątek
+    });
+};
+
+const createCrmMailID = (crmKey, crypto = "") => {
+  crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+  const result = checkIfCrmMailExist(crmKey, crypto).then(result => {
+    return result;
+  });
+
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve(result);
+    }, 500);
+  });
+};
+
+const checkIfCrmMailExist = (crmKey, crypto) => {
+  return firebase
+    .database()
+    .ref("crm/" + crmKey + "/korespondencja/" + crypto.toString())
+    .once("value")
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        return checkIfCrmClientExist(crmKey, crypto);
+      } else {
+        return crypto;
+      }
+    });
+};
+
+export const deleteCrmMail = (crmKey, mailKey) => dispatch => {
+  firebase
+    .database()
+    .ref("crm/" + crmKey + "/korespondencja/" + mailKey)
+    .set(null, e => {
+      alert("Korespondencja została usunięta!");
+      dispatch(getCrmMails(crmKey));
+    });
+};
+
+export const setMailToEdit = mail => {
+  return {
+    type: SET_MAIL_TO_EDIT,
+    editMail: mail
+  };
+};
+
+export const editCrmMail = (
+  name,
+  concern,
+  type,
+  form,
+  comment,
+  crmKey,
+  mailKey,
+  callback
+) => dispatch => {
+  firebase
+    .database()
+    .ref("crm/" + crmKey + "/korespondencja/" + mailKey)
+    .set({
+      name,
+      concern,
+      type,
+      form,
+      comment
+    })
+    .then(() => {
+      // dispatch(createSuccess(user));
+      dispatch(getCrmMails(crmKey));
+      callback();
+    })
+    .catch(error => {
+      console.log("MailEdit: ", error);
+      //TODO: Do przerobienia dispatch
+      //  dispatch(createUserFail(error));
+    });
+};
+
+export const getCrmMails = crmKey => dispatch => {
+  firebase
+    .database()
+    .ref("crm/" + crmKey + "/korespondencja")
+    .once("value", snapshot => {
+      console.log("getCrmMailsVal: ", snapshot.val());
+      dispatch(getCrmMailsSuccess(snapshot.val()));
+    });
+};
+
+export const getCrmMailsSuccess = resp => {
+  return {
+    type: GET_CRM_MAILS_SUCCESS,
+    crmMails: { ...resp }
+  };
+};
+
+export const searchMailsByClient = arg => {
+  return {
+    type: SEARCH_MAILS,
+    searchMails: arg
   };
 };
 
