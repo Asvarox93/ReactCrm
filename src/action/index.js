@@ -858,6 +858,28 @@ export const deleteCrmMail = (crmKey, mailKey, fileUrl) => dispatch => {
     });
 };
 
+export const downloadCrmMail = (fileUrl, fileName) => dispatch => {
+  const storageRef = firebase.storage().ref();
+  storageRef
+    .child(fileUrl)
+    .getDownloadURL()
+    .then(url => {
+      axios({
+        url: url,
+        method: "GET",
+        responseType: "blob"
+      }).then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      });
+    });
+};
+
 export const setMailToEdit = mail => {
   return {
     type: SET_MAIL_TO_EDIT,

@@ -6,6 +6,7 @@ import {
   getCrmMails,
   setMailToEdit,
   deleteCrmMail,
+  downloadCrmMail,
   searchMailsByClient
 } from "../../action/index";
 import MailRegisterModal from "./crm_korespondencja_add";
@@ -36,6 +37,10 @@ class Korespondencja extends Component {
     this.props.deleteCrmMail(crmKey, mailKey, fileUrl);
   }
 
+  downloadCrmMail(fileUrl, fileName) {
+    this.props.downloadCrmMail(fileUrl, fileName);
+  }
+
   searchMails(e) {
     const filter = e.target.value;
     this.props.searchMailsByClient(filter);
@@ -56,6 +61,16 @@ class Korespondencja extends Component {
           <td className="crm__table__th">{value.type}</td>
           <td className="crm__table__th">{value.form}</td>
           <td className="crm__table__th">{value.comment}</td>
+          <td>
+            <button
+              className="auth__submit"
+              onClick={() =>
+                this.downloadCrmMail(value.attachmentUrl, value.attachment)
+              }
+            >
+              Pobierz
+            </button>
+          </td>
           <td>
             <button
               className="auth__submit"
@@ -165,6 +180,7 @@ export default connect(
     getCrmMails,
     setMailToEdit,
     deleteCrmMail,
+    downloadCrmMail,
     searchMailsByClient
   }
 )(Korespondencja);
