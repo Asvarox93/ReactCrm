@@ -31,9 +31,9 @@ class Korespondencja extends Component {
     return;
   }
 
-  deteleCrmMail(mailKey) {
+  deteleCrmMail(mailKey, fileUrl) {
     const { crmKey } = this.props;
-    this.props.deleteCrmMail(crmKey, mailKey);
+    this.props.deleteCrmMail(crmKey, mailKey, fileUrl);
   }
 
   searchMails(e) {
@@ -67,7 +67,7 @@ class Korespondencja extends Component {
           <td>
             <button
               className="auth__submit"
-              onClick={() => this.deteleCrmMail(key)}
+              onClick={() => this.deteleCrmMail(key, value.attachmentUrl)}
             >
               Usuń
             </button>
@@ -93,7 +93,7 @@ class Korespondencja extends Component {
   render() {
     const { privileges, modalActive, crmMails, searchMails } = this.props;
 
-    if (privileges.klienci === true) {
+    if (privileges.korespondencja === true) {
       return (
         <div>
           {this.showMailsModal(modalActive)}
@@ -153,8 +153,8 @@ const mapStateToProps = state => {
     modalActive: state.modal,
     privileges: state.auth.auth.privileges,
     crmKey: state.auth.auth.crmKey,
-    crmMails: state.fetchTable.crmClients,
-    searchMails: state.fetchTable.searchClients
+    crmMails: state.fetchTable.crmMails,
+    searchMails: state.fetchTable.searchMails
   };
 };
 

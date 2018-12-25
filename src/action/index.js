@@ -49,7 +49,9 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
                   dashboard: true,
                   klienci: true,
                   pracownicy: true,
-                  zlecenia: true
+                  zlecenia: true,
+                  korespondencja: true,
+                  umowy: true
                 }
               })
               .then(e => {
@@ -223,7 +225,9 @@ export const createCrmUser = (
                 dashboard: true,
                 klienci: privileges.klienci,
                 pracownicy: privileges.pracownicy,
-                zlecenia: privileges.zlecenia
+                zlecenia: privileges.zlecenia,
+                korespondencja: privileges.korespondencja,
+                umowy: privileges.umowy
               }
             })
             .then(() => {
@@ -711,19 +715,72 @@ export const hideClosedOrders = arg => {
 };
 
 // ==========Korespondencja==========
+
 export const createCrmMail = (
   name,
   concern,
   type,
   form,
   comment,
-  file,
-  city,
+  attachment,
   crmKey,
   callback
 ) => dispatch => {
+  const date = new Date().getTime();
+
   createCrmMailID(crmKey)
     .then(mailId => {
+      const storageRef = firebase.storage().ref();
+      const uploadTask = storageRef
+        .child(
+          "crm/" + crmKey + "/korespondencja/" + date + "/" + attachment.name
+        )
+        .put(attachment);
+
+      uploadTask.on(
+        firebase.storage.TaskEvent.STATE_CHANGED,
+        function(snapshot) {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          var progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED:
+              console.log("Upload is paused");
+              break;
+            case firebase.storage.TaskState.RUNNING:
+              console.log("Upload is running");
+              break;
+            default:
+              break;
+          }
+        },
+        function(error) {
+          // A full list of error codes is available at
+          // https://firebase.google.com/docs/storage/web/handle-errors
+          switch (error.code) {
+            case "storage/unauthorized":
+              // User doesn't have permission to access the object
+              break;
+
+            case "storage/canceled":
+              // User canceled the upload
+              break;
+
+            case "storage/unknown":
+              // Unknown error occurred, inspect error.serverResponse
+              break;
+            default:
+              break;
+          }
+        },
+        function() {
+          uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            console.log("File available at", downloadURL);
+          });
+        }
+      );
+
       firebase
         .database()
         .ref("crm/" + crmKey + "/korespondencja/" + mailId)
@@ -734,7 +791,9 @@ export const createCrmMail = (
           type,
           form,
           comment,
-          file
+          attachment: attachment.name,
+          attachmentUrl:
+            "crm/" + crmKey + "/korespondencja/" + date + "/" + attachment.name
         })
         .then(() => {
           // dispatch(createSuccess(user));
@@ -780,13 +839,22 @@ const checkIfCrmMailExist = (crmKey, crypto) => {
     });
 };
 
-export const deleteCrmMail = (crmKey, mailKey) => dispatch => {
-  firebase
-    .database()
-    .ref("crm/" + crmKey + "/korespondencja/" + mailKey)
-    .set(null, e => {
-      alert("Korespondencja została usunięta!");
-      dispatch(getCrmMails(crmKey));
+export const deleteCrmMail = (crmKey, mailKey, fileUrl) => dispatch => {
+  const storageRef = firebase.storage().ref();
+  storageRef
+    .child(fileUrl)
+    .delete()
+    .then(() => {
+      firebase
+        .database()
+        .ref("crm/" + crmKey + "/korespondencja/" + mailKey)
+        .set(null, e => {
+          alert("Korespondencja została usunięta!");
+          dispatch(getCrmMails(crmKey));
+        });
+    })
+    .catch(function(error) {
+      alert("Ups! Korespondencja nie mogła zostać usunięta!");
     });
 };
 
