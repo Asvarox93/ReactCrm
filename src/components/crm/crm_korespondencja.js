@@ -34,6 +34,7 @@ class Korespondencja extends Component {
 
   deteleCrmMail(mailKey, fileUrl) {
     const { crmKey } = this.props;
+    console.log("mailKey:", mailKey);
     this.props.deleteCrmMail(crmKey, mailKey, fileUrl);
   }
 
@@ -52,12 +53,12 @@ class Korespondencja extends Component {
 
     let listItems = Object.entries(crmMails).map(([key, value]) => {
       number++;
-
       return (
-        <tr key={key} name={value.name}>
+        <tr key={value.mailId} name={value.name}>
           <td className="crm__table__th">{number}</td>
           <td className="crm__table__th">{value.name}</td>
           <td className="crm__table__th">{value.concern}</td>
+          <td className="crm__table__th">{value.date}</td>
           <td className="crm__table__th">{value.type}</td>
           <td className="crm__table__th">{value.form}</td>
           <td className="crm__table__th">{value.comment}</td>
@@ -82,7 +83,9 @@ class Korespondencja extends Component {
           <td>
             <button
               className="auth__submit"
-              onClick={() => this.deteleCrmMail(key, value.attachmentUrl)}
+              onClick={() =>
+                this.deteleCrmMail(value.mailId, value.attachmentUrl)
+              }
             >
               Usuń
             </button>
@@ -131,6 +134,7 @@ class Korespondencja extends Component {
                 <th className="crm__table__th">LP</th>
                 <th className="crm__table__th">Nazwa</th>
                 <th className="crm__table__th">Dotyczy</th>
+                <th className="crm__table__th">Data dokumentu</th>
                 <th className="crm__table__th">Typ</th>
                 <th className="crm__table__th">Forma</th>
                 <th className="crm__table__th">Uwagi</th>

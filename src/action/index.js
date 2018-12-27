@@ -672,10 +672,13 @@ export const getCrmOrders = crmKey => dispatch => {
     .database()
     .ref("crm/" + crmKey + "/zlecenia")
     .once("value", snapshot => {
-      let arr = Object.entries(snapshot.val()).map(e =>
-        Object.assign(e[1], { key: e[0] })
-      );
-      const orderFilter = _.orderBy(arr, ["addedDate"], ["desc"]);
+      let orderFilter = "";
+      if (snapshot.exists()) {
+        let arr = Object.entries(snapshot.val()).map(e =>
+          Object.assign(e[1], { key: e[0] })
+        );
+        orderFilter = _.orderBy(arr, ["addedDate"], ["desc"]);
+      }
       dispatch(getCrmOrdersSuccess(orderFilter));
     });
 };
@@ -719,6 +722,7 @@ export const hideClosedOrders = arg => {
 export const createCrmMail = (
   name,
   concern,
+  date,
   type,
   form,
   comment,
@@ -726,14 +730,14 @@ export const createCrmMail = (
   crmKey,
   callback
 ) => dispatch => {
-  const date = new Date().getTime();
+  const dateT = new Date().getTime();
 
   createCrmMailID(crmKey)
     .then(mailId => {
       const storageRef = firebase.storage().ref();
       const uploadTask = storageRef
         .child(
-          "crm/" + crmKey + "/korespondencja/" + date + "/" + attachment.name
+          "crm/" + crmKey + "/korespondencja/" + dateT + "/" + attachment.name
         )
         .put(attachment);
 
@@ -788,12 +792,13 @@ export const createCrmMail = (
           mailId,
           name,
           concern,
+          date,
           type,
           form,
           comment,
           attachment: attachment.name,
           attachmentUrl:
-            "crm/" + crmKey + "/korespondencja/" + date + "/" + attachment.name
+            "crm/" + crmKey + "/korespondencja/" + dateT + "/" + attachment.name
         })
         .then(() => {
           // dispatch(createSuccess(user));
@@ -854,7 +859,18 @@ export const deleteCrmMail = (crmKey, mailKey, fileUrl) => dispatch => {
         });
     })
     .catch(function(error) {
-      alert("Ups! Korespondencja nie mogła zostać usunięta!");
+      console.log("error:", error);
+      if (error.code === "storage/object-not-found") {
+        firebase
+          .database()
+          .ref("crm/" + crmKey + "/korespondencja/" + mailKey)
+          .set(null, e => {
+            alert("Korespondencja została usunięta!");
+            dispatch(getCrmMails(crmKey));
+          });
+      } else {
+        alert("Ups! Korespondencja nie mogła zostać usunięta!");
+      }
     });
 };
 
@@ -890,6 +906,7 @@ export const setMailToEdit = mail => {
 export const editCrmMail = (
   name,
   concern,
+  date,
   type,
   form,
   comment,
@@ -903,6 +920,7 @@ export const editCrmMail = (
     .set({
       name,
       concern,
+      date,
       type,
       form,
       comment
@@ -924,8 +942,14 @@ export const getCrmMails = crmKey => dispatch => {
     .database()
     .ref("crm/" + crmKey + "/korespondencja")
     .once("value", snapshot => {
-      console.log("getCrmMailsVal: ", snapshot.val());
-      dispatch(getCrmMailsSuccess(snapshot.val()));
+      let orderFilter = "";
+      if (snapshot.exists()) {
+        let arr = Object.entries(snapshot.val()).map(e =>
+          Object.assign(e[1], { key: e[0] })
+        );
+        orderFilter = _.orderBy(arr, ["date"], ["desc"]);
+      }
+      dispatch(getCrmMailsSuccess(orderFilter));
     });
 };
 

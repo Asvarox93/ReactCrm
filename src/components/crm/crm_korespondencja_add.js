@@ -15,6 +15,21 @@ class MailRegisterModal extends Component {
   }
 
   renderField(field) {
+    if (field.type === "select") {
+      return (
+        <div className="auth__field">
+          <label className="auth__label">{field.label}</label>
+          <select {...field.input} className="auth__select">
+            <option disabled>Wybierz</option>
+            {field.children}
+          </select>
+          <p className="auth__errors">
+            {field.meta.touched ? field.meta.error : ""}
+          </p>
+        </div>
+      );
+    }
+
     return (
       <div className="auth__field">
         <label className="auth__label">{field.label}</label>
@@ -27,15 +42,14 @@ class MailRegisterModal extends Component {
   }
 
   onFormSubmit(e) {
-    const { name, concern, type, form, comment, attachment } = e;
+    const { name, concern, date, type, form, comment, attachment } = e;
     const { crmKey } = this.props;
-
-    console.log("cale e:", e);
 
     if (this.props.privileges.korespondencja) {
       this.props.createCrmMail(
         name,
         concern,
+        date,
         type,
         form,
         comment,
@@ -89,7 +103,7 @@ class MailRegisterModal extends Component {
             {this.props.authRegisterError}
             <Field
               type="text"
-              label="Nazwa"
+              label="Nadawca"
               name="name"
               component={this.renderField}
             />
@@ -99,18 +113,37 @@ class MailRegisterModal extends Component {
               name="concern"
               component={this.renderField}
             />
+
             <Field
-              type="text"
+              type="select"
               label="Typ"
               name="type"
               component={this.renderField}
-            />
+            >
+              <option value="Przychodzące">Przychodzące</option>
+              <option value="Wychodzace">Wychodzace</option>
+            </Field>
+
             <Field
-              type="text"
-              label="Forma"
+              type="select"
+              label="Dostawca"
               name="form"
               component={this.renderField}
+            >
+              <option value="Kurier">Kurier</option>
+              <option value="List priorytetowy">List priorytetowy</option>
+              <option value="List ekonomiczny">List ekonomiczny</option>
+              <option value="Paczka priorytetowa">Paczka priorytetowa</option>
+              <option value="Paczka ekonomiczna">Paczka ekonomiczna</option>
+            </Field>
+
+            <Field
+              type="date"
+              label="Data dokumentu"
+              name="date"
+              component={this.renderField}
             />
+
             <Field
               type="text"
               label="Uwagi"
@@ -177,6 +210,19 @@ class MailRegisterModal extends Component {
         </div>
       );
     }
+  }
+  componentDidMount() {
+    const dateObj = new Date();
+    const month = dateObj.getUTCMonth() + 1; //months from 1-12
+    const day = dateObj.getUTCDate();
+    const year = dateObj.getUTCFullYear();
+    const newdate = year + "-" + month + "-" + day;
+
+    this.props.initialize({
+      type: "Przychodzące",
+      form: "Kurier",
+      date: newdate
+    });
   }
 }
 function validate(values) {
