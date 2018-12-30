@@ -18,10 +18,13 @@ export const SET_ORDER_TO_EDIT = "SET_ORDER_TO_EDIT";
 export const HIDE_CLOSED_ORDER_TOGGLE = "HIDE_CLOSED_ORDER_TOGGLE";
 export const GET_CRM_MAILS_SUCCESS = "GET_CRM_MAILS_SUCCESS";
 export const SET_MAIL_TO_EDIT = "SET_MAIL_TO_EDIT";
+export const GET_CRM_CONTRACTS_SUCCESS = "GET_CRM_CONTRACTS_SUCCESS";
+export const SET_CONTRACT_TO_EDIT = "SET_CONTRACT_TO_EDIT";
 export const SEARCH_ORDER = "SEARCH_ORDER";
 export const SEARCH_CLIENT = "SEARCH_CLIENT";
 export const SEARCH_WORKER = "SEARCH_WORKER";
 export const SEARCH_MAILS = "SEARCH_MAILS";
+export const SEARCH_CONTRACTS = "SEARCH_CONTRACTS";
 
 export const createUser = (email, pass, nickname, callback) => dispatch => {
   firebase
@@ -437,7 +440,7 @@ export const editCrmClient = (
   firebase
     .database()
     .ref("crm/" + crmKey + "/klienci/" + clientKey)
-    .set({
+    .update({
       name,
       nip,
       email,
@@ -917,7 +920,7 @@ export const editCrmMail = (
   firebase
     .database()
     .ref("crm/" + crmKey + "/korespondencja/" + mailKey)
-    .set({
+    .update({
       name,
       concern,
       date,
@@ -964,6 +967,249 @@ export const searchMailsByClient = arg => {
   return {
     type: SEARCH_MAILS,
     searchMails: arg
+  };
+};
+//  ==========Umowy==========
+
+export const createCrmContract = (
+  name,
+  contractDate,
+  deadlineDate,
+  type,
+  comment = "",
+  attachment,
+  crmKey,
+  callback
+) => dispatch => {
+  const dateT = new Date().getTime();
+
+  createCrmContractID(crmKey)
+    .then(contractId => {
+      const storageRef = firebase.storage().ref();
+      const uploadTask = storageRef
+        .child("crm/" + crmKey + "/umowy/" + dateT + "/" + attachment.name)
+        .put(attachment);
+
+      uploadTask.on(
+        firebase.storage.TaskEvent.STATE_CHANGED,
+        function(snapshot) {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          var progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED:
+              console.log("Upload is paused");
+              break;
+            case firebase.storage.TaskState.RUNNING:
+              console.log("Upload is running");
+              break;
+            default:
+              break;
+          }
+        },
+        function(error) {
+          // A full list of error codes is available at
+          // https://firebase.google.com/docs/storage/web/handle-errors
+          switch (error.code) {
+            case "storage/unauthorized":
+              // User doesn't have permission to access the object
+              break;
+
+            case "storage/canceled":
+              // User canceled the upload
+              break;
+
+            case "storage/unknown":
+              // Unknown error occurred, inspect error.serverResponse
+              break;
+            default:
+              break;
+          }
+        },
+        function() {
+          uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            console.log("File available at", downloadURL);
+          });
+        }
+      );
+
+      firebase
+        .database()
+        .ref("crm/" + crmKey + "/umowy/" + contractId)
+        .set({
+          contractId,
+          name,
+          contractDate,
+          deadlineDate,
+          type,
+          comment,
+          attachment: attachment.name,
+          attachmentUrl:
+            "crm/" + crmKey + "/umowy/" + dateT + "/" + attachment.name
+        })
+        .then(() => {
+          // dispatch(createSuccess(user));
+          dispatch(getCrmContracts(crmKey));
+          callback();
+        })
+        .catch(error => {
+          console.log("ContractADD: ", error);
+          //TODO: Do przerobienia dispatch
+          //  dispatch(createUserFail(error));
+        });
+    })
+    .catch(error => {
+      //TODO: Do zrobieniaw wyjątek
+    });
+};
+
+const createCrmContractID = (crmKey, crypto = "") => {
+  crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+  const result = checkIfCrmContractExist(crmKey, crypto).then(result => {
+    return result;
+  });
+
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve(result);
+    }, 500);
+  });
+};
+
+const checkIfCrmContractExist = (crmKey, crypto) => {
+  return firebase
+    .database()
+    .ref("crm/" + crmKey + "/umowy/" + crypto.toString())
+    .once("value")
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        crypto = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        return checkIfCrmClientExist(crmKey, crypto);
+      } else {
+        return crypto;
+      }
+    });
+};
+
+export const deleteCrmContract = (crmKey, contractKey, fileUrl) => dispatch => {
+  const storageRef = firebase.storage().ref();
+  storageRef
+    .child(fileUrl)
+    .delete()
+    .then(() => {
+      firebase
+        .database()
+        .ref("crm/" + crmKey + "/umowy/" + contractKey)
+        .set(null, e => {
+          alert("Umowa została usunięta!");
+          dispatch(getCrmContracts(crmKey));
+        });
+    })
+    .catch(function(error) {
+      console.log("error:", error);
+      if (error.code === "storage/object-not-found") {
+        firebase
+          .database()
+          .ref("crm/" + crmKey + "/umowy/" + contractKey)
+          .set(null, e => {
+            alert("Umowa została usunięta!");
+            dispatch(getCrmContracts(crmKey));
+          });
+      } else {
+        alert("Ups! Umowa nie mogła zostać usunięta!");
+      }
+    });
+};
+
+export const downloadCrmContract = (fileUrl, fileName) => dispatch => {
+  const storageRef = firebase.storage().ref();
+  storageRef
+    .child(fileUrl)
+    .getDownloadURL()
+    .then(url => {
+      axios({
+        url: url,
+        method: "GET",
+        responseType: "blob"
+      }).then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      });
+    });
+};
+
+export const setContractToEdit = contract => {
+  return {
+    type: SET_CONTRACT_TO_EDIT,
+    editContract: contract
+  };
+};
+
+export const editCrmContract = (
+  name,
+  contractDate,
+  deadlineDate,
+  type,
+  comment,
+  crmKey,
+  contractKey,
+  callback
+) => dispatch => {
+  firebase
+    .database()
+    .ref("crm/" + crmKey + "/umowy/" + contractKey)
+    .update({
+      name,
+      contractDate,
+      deadlineDate,
+      type,
+      comment
+    })
+    .then(() => {
+      // dispatch(createSuccess(user));
+      dispatch(getCrmContracts(crmKey));
+      callback();
+    })
+    .catch(error => {
+      console.log("ContractEdit: ", error);
+      //TODO: Do przerobienia dispatch
+      //  dispatch(createUserFail(error));
+    });
+};
+
+export const getCrmContracts = crmKey => dispatch => {
+  firebase
+    .database()
+    .ref("crm/" + crmKey + "/umowy")
+    .once("value", snapshot => {
+      let orderFilter = "";
+      if (snapshot.exists()) {
+        let arr = Object.entries(snapshot.val()).map(e =>
+          Object.assign(e[1], { key: e[0] })
+        );
+        orderFilter = _.orderBy(arr, ["date"], ["desc"]);
+      }
+      dispatch(getCrmContractsSuccess(orderFilter));
+    });
+};
+
+export const getCrmContractsSuccess = resp => {
+  return {
+    type: GET_CRM_CONTRACTS_SUCCESS,
+    crmContracts: { ...resp }
+  };
+};
+
+export const searchContractsByClient = arg => {
+  return {
+    type: SEARCH_CONTRACTS,
+    searchContracts: arg
   };
 };
 

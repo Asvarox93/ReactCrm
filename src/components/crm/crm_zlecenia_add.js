@@ -9,7 +9,7 @@ import {
   onModalOff
 } from "../../action/index";
 
-class OrderRegisterModal extends Component {
+class OrderEditModal extends Component {
   renderField(field) {
     if (field.type === "select") {
       return (
@@ -200,5 +200,5 @@ export default reduxForm({
   connect(
     mapStateToProps,
     { createCrmOrder, getCrmClients, getCrmUsers, onModalOff }
-  )(OrderRegisterModal)
+  )(OrderEditModal)
 );

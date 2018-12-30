@@ -34,7 +34,6 @@ class Korespondencja extends Component {
 
   deteleCrmMail(mailKey, fileUrl) {
     const { crmKey } = this.props;
-    console.log("mailKey:", mailKey);
     this.props.deleteCrmMail(crmKey, mailKey, fileUrl);
   }
 
@@ -53,8 +52,9 @@ class Korespondencja extends Component {
 
     let listItems = Object.entries(crmMails).map(([key, value]) => {
       number++;
+      const mailId = value.mailId;
       return (
-        <tr key={value.mailId} name={value.name}>
+        <tr key={key} name={value.name}>
           <td className="crm__table__th">{number}</td>
           <td className="crm__table__th">{value.name}</td>
           <td className="crm__table__th">{value.concern}</td>
@@ -75,7 +75,7 @@ class Korespondencja extends Component {
           <td>
             <button
               className="auth__submit"
-              onClick={() => this.onButtonClick("EDIT", value, key)}
+              onClick={() => this.onButtonClick("EDIT", value, mailId)}
             >
               Edytuj
             </button>
@@ -83,9 +83,7 @@ class Korespondencja extends Component {
           <td>
             <button
               className="auth__submit"
-              onClick={() =>
-                this.deteleCrmMail(value.mailId, value.attachmentUrl)
-              }
+              onClick={() => this.deteleCrmMail(mailId, value.attachmentUrl)}
             >
               Usuń
             </button>

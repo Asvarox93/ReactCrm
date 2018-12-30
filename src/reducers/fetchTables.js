@@ -7,11 +7,14 @@ import {
   SET_ORDER_TO_EDIT,
   GET_CRM_MAILS_SUCCESS,
   SET_MAIL_TO_EDIT,
+  GET_CRM_CONTRACTS_SUCCESS,
+  SET_CONTRACT_TO_EDIT,
   HIDE_CLOSED_ORDER_TOGGLE,
   SEARCH_ORDER,
   SEARCH_CLIENT,
   SEARCH_WORKER,
-  SEARCH_MAILS
+  SEARCH_MAILS,
+  SEARCH_CONTRACTS
 } from "../action/index";
 
 const fetchTable = (state = [], action) => {
@@ -40,6 +43,12 @@ const fetchTable = (state = [], action) => {
     case SET_MAIL_TO_EDIT:
       const editMail = action.editMail;
       return { ...state, editMail };
+    case GET_CRM_CONTRACTS_SUCCESS:
+      const crmContracts = action.crmContracts;
+      return { ...state, crmContracts };
+    case SET_CONTRACT_TO_EDIT:
+      const editContract = action.editContract;
+      return { ...state, editContract };
     case HIDE_CLOSED_ORDER_TOGGLE:
       const hideClosedOrders = action.hideClosedOrders;
       return { ...state, hideClosedOrders };
@@ -55,6 +64,9 @@ const fetchTable = (state = [], action) => {
     case SEARCH_MAILS:
       const searchMails = action.searchMails;
       return { ...state, searchMails };
+    case SEARCH_CONTRACTS:
+      const searchContracts = action.searchContracts;
+      return { ...state, searchContracts };
     default:
       return state;
   }
