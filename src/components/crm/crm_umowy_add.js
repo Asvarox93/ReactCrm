@@ -90,14 +90,14 @@ class ContractRegisterModal extends Component {
     if (privileges.umowy === true) {
       return (
         <div className="formModal">
-          <div>Formularz dodawania Korespondencji:</div>
+          <div>Formularz dodawania Umowy/Oferty:</div>
 
           <form
             onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
             className="auth__form"
           >
             <h2 className="auth__title">
-              Formularz dodawania nowej korespondencji
+              Formularz dodawania nowej Umowy/Oferty
             </h2>
             {this.props.authRegisterError}
             <Field

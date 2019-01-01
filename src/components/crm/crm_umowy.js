@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {
   onModalShow,
   getCrmContracts,
-  setMailToEdit,
+  setContractToEdit,
   deleteCrmContract,
   downloadCrmContract,
   searchContractsByClient
@@ -185,7 +185,7 @@ export default connect(
   {
     onModalShow,
     getCrmContracts,
-    setMailToEdit,
+    setContractToEdit,
     deleteCrmContract,
     downloadCrmContract,
     searchContractsByClient

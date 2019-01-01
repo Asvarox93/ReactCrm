@@ -1193,7 +1193,7 @@ export const getCrmContracts = crmKey => dispatch => {
         let arr = Object.entries(snapshot.val()).map(e =>
           Object.assign(e[1], { key: e[0] })
         );
-        orderFilter = _.orderBy(arr, ["date"], ["desc"]);
+        orderFilter = _.orderBy(arr, ["contractDate"], ["desc"]);
       }
       dispatch(getCrmContractsSuccess(orderFilter));
     });

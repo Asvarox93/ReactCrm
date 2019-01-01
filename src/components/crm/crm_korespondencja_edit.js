@@ -155,7 +155,6 @@ class MailEditModal extends Component {
     }
   }
   componentDidMount() {
-    console.log("dupa", this.props.crmMail);
     const {
       crmMail: { mail }
     } = this.props;
