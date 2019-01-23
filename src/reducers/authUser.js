@@ -1,10 +1,8 @@
-import initialState from "../reducers/index";
 import {
   CREATE_USER_SUCCESS,
   CREATE_USER_FAIL,
   LOGIN_USER_SUCCESS,
-  LOGIN_USER_FAIL,
-  SIGN_OUT
+  LOGIN_USER_FAIL
 } from "../action/index";
 
 const auth = (state = [], action) => {
@@ -32,9 +30,6 @@ const auth = (state = [], action) => {
       return { ...state, loggedIn: true, userId };
     case CREATE_USER_FAIL:
       return { ...state, loggedIn: false, authRegisterError: action.error };
-    case SIGN_OUT:
-      state = initialState;
-      return state;
     default:
       return state;
   }

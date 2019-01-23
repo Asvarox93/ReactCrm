@@ -3,6 +3,7 @@ import { reducer as formReducer } from "redux-form";
 import auth from "./authUser";
 import modal from "./modalBox";
 import fetchTable from "./fetchTables";
+import { SIGN_OUT } from "../action/index";
 
 const rootReducer = combineReducers({
   modal,
@@ -51,5 +52,12 @@ const initialState = {
   form: formReducer
 };
 
+const allReducer = (state, action) => {
+  if (action.type === SIGN_OUT) {
+    state = initialState;
+  }
+  return rootReducer(state, action);
+};
+
 export { initialState };
-export default rootReducer;
+export default allReducer;

@@ -75,7 +75,7 @@ class Zlecenia extends Component {
             <td>
               <button
                 className="auth__submit"
-                onClick={() => this.onButtonClick("EDIT", value, key)}
+                onClick={() => this.onButtonClick("EDIT", value, value.key)}
               >
                 Edytuj
               </button>
@@ -83,7 +83,7 @@ class Zlecenia extends Component {
             <td>
               <button
                 className="auth__submit"
-                onClick={() => this.onButtonClick("HISTORY", value, key)}
+                onClick={() => this.onButtonClick("HISTORY", value, value.key)}
               >
                 Działania
               </button>

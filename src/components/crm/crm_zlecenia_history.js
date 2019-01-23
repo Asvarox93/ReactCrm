@@ -24,7 +24,6 @@ class OrderHistoryModal extends Component {
       crmKey,
       crmOrder: { uid: orderKey }
     } = this.props;
-
     if (this.props.privileges.zlecenia) {
       this.props.historyCrmOrder(history, orderKey, crmKey, () => {
         this.closeOrderModal();
