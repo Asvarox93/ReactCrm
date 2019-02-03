@@ -91,7 +91,7 @@ class Zlecenia extends Component {
             <td>
               <button
                 className="auth__submit"
-                onClick={() => this.closeCrmOrder(key)}
+                onClick={() => this.closeCrmOrder(value.key)}
               >
                 Zamknij
               </button>

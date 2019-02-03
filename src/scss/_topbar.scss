@@ -1,0 +1,73 @@
+.topbar {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  max-width: 23.75rem;
+  height: 100vh;
+  background-color: $topbar_bgc;
+  color: $topbar_color;
+  box-sizing: border-box;
+  padding: 0 0.8rem;
+
+  &__logotype {
+    padding: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+
+    span {
+      padding-left: 0.5rem;
+      color: $topbar_logotype_span;
+      font-weight: bold;
+    }
+  }
+  &__logoImg {
+    height: 3rem;
+  }
+
+  &__user {
+    span {
+      color: $topbar_user-color;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+  }
+  &__userLogout {
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 400;
+    border-radius: 0.2rem;
+    background-color: $topbar_logoutBtn-bgc;
+    color: $topbar_logoutBtn-color;
+    margin-top: 1rem;
+  }
+
+  &__navbar {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__navlink {
+    box-sizing: border-box;
+    padding: 0.5rem 0 0.5rem 0.1rem;
+    border-top: 1px solid $topbar_navbar-border;
+
+    &:last-child {
+      border-bottom: 1px solid $topbar_navbar-border;
+    }
+
+    a {
+      color: $topbar_navbar-color;
+      text-decoration: none;
+
+      &:hover {
+        color: $topbar_navbar-colorH;
+      }
+    }
+  }
+}

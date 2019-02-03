@@ -1,0 +1,40 @@
+//  FONTS
+$aleo_url: url("./fonts/Aleo-Regular.otf");
+$aleo-bold_url: url("./fonts/Aleo-Bold.otf");
+
+@font-face {
+  font-family: "Aleo";
+  font-style: normal;
+  font-weight: 400;
+  src: $aleo_url;
+}
+@font-face {
+  font-family: "Aleo";
+  font-style: bold;
+  font-weight: 700;
+  src: $aleo-bold_url;
+}
+
+//  MAIN COLORS
+$main_color: #0072bc;
+
+//  LOGOWANIE I REJESTRACJA
+$auth_bgc: #fff;
+$auth_field-color: #000;
+$auth_title-color: $main_color;
+$auth_input-border: rgba(0, 0, 0, 0.2);
+$auth_submit-bgc: $main_color;
+$auth_submit-color: #fff;
+$auth_change-color: $main_color;
+$auth_return-color: #000;
+
+//  TOPBAR
+$topbar_bgc: #363636;
+$topbar_color: #fff;
+$topbar_logotype_span: $main_color;
+$topbar_user-color: $main_color;
+$topbar_logoutBtn-bgc: $main_color;
+$topbar_logoutBtn-color: #fff;
+$topbar_navbar-color: #fff;
+$topbar_navbar-colorH: $main_color;
+$topbar_navbar-border: rgba(255, 255, 255, 0.2);

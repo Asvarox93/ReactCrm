@@ -13,10 +13,14 @@ class Auth extends Component {
   renderField(field) {
     return (
       <div className={field.notRegister ? "auth__field--hide" : "auth__field"}>
-        <label className="auth__label">{field.label}</label>
-        <input {...field.input} type={field.type} className="auth__input" />
+        <input
+          {...field.input}
+          type={field.type}
+          placeholder={field.label}
+          className="auth__input"
+        />
         <p className="auth__errors">
-          {field.meta.touched ? field.meta.error : ""}
+          {field.meta.dirty ? field.meta.error : ""}
         </p>
       </div>
     );
@@ -48,7 +52,7 @@ class Auth extends Component {
         className="auth__form"
       >
         <h2 className="auth__title">
-          Formularz {this.state.isRegister ? "Rejestracyjny" : "Logowania"}
+          {this.state.isRegister ? "Rejestracja" : "Logowanie"}
         </h2>
         {this.state.isRegister
           ? this.props.authRegisterError
@@ -68,28 +72,29 @@ class Auth extends Component {
         />
         <Field
           type="password"
-          label="Password"
+          label="Hasło"
           name="password"
           component={this.renderField}
         />
         <button className="auth__submit">
           {this.state.isRegister ? "Zarejestruj" : "Zaloguj"}
         </button>
-        <Link to="/" className="auth__submit auth__submit--return">
-          Cofnij
-        </Link>
         <p className="auth__register">
           {this.state.isRegister
-            ? "Jeśli chcesz się zalogować kliknij "
-            : "Jeśli nie posiadasz konta kliknij "}
-          <span
-            onClick={() => {
-              this.setState({ isRegister: !this.state.isRegister });
-            }}
-          >
-            TUTAJ!
-          </span>
+            ? "Posiadasz już konto?"
+            : "Nie posiadasz konta?"}
         </p>
+        <button
+          className="auth__change"
+          onClick={() => {
+            this.setState({ isRegister: !this.state.isRegister });
+          }}
+        >
+          {this.state.isRegister ? "Logowanie" : "Rejestracja"}
+        </button>
+        <Link to="/" className="auth__return">
+          Cofnij
+        </Link>
       </form>
     );
   }
@@ -104,7 +109,7 @@ function validate(values) {
   if (!values.password) {
     errors.password = "Prosze o wprowadzenie poprawnego hasła!";
   }
-  if (values.password && values.password.length < 3) {
+  if (values.password && values.password.length <= 3) {
     errors.password = "Hasło musi się składać z minimum 3 znaków!";
   }
 

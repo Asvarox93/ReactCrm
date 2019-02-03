@@ -24,16 +24,18 @@ class Crm_panel extends Component {
 
     if (loggedIn && auth.emailVerified) {
       return (
-        <div>
+        <div className="panel">
           <TopBar />
-          <Switch>
-            <Route exact path="/crm" component={Dashboard} />
-            <Route path="/crm/zlecenia" component={Zlecenia} />
-            <Route path="/crm/klienci" component={Klienci} />
-            <Route path="/crm/pracownicy" component={Pracownicy} />
-            <Route path="/crm/korespondencja" component={Korespondencja} />
-            <Route path="/crm/umowy" component={Umowy} />
-          </Switch>
+          <div className="panel__switch">
+            <Switch>
+              <Route exact path="/crm" component={Dashboard} />
+              <Route path="/crm/zlecenia" component={Zlecenia} />
+              <Route path="/crm/klienci" component={Klienci} />
+              <Route path="/crm/pracownicy" component={Pracownicy} />
+              <Route path="/crm/korespondencja" component={Korespondencja} />
+              <Route path="/crm/umowy" component={Umowy} />
+            </Switch>
+          </div>
         </div>
       );
     }
