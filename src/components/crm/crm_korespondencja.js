@@ -55,14 +55,14 @@ class Korespondencja extends Component {
       const mailId = value.mailId;
       return (
         <tr key={key} name={value.name}>
-          <td className="crm__table__th">{number}</td>
-          <td className="crm__table__th">{value.name}</td>
-          <td className="crm__table__th">{value.concern}</td>
-          <td className="crm__table__th">{value.date}</td>
-          <td className="crm__table__th">{value.type}</td>
-          <td className="crm__table__th">{value.form}</td>
-          <td className="crm__table__th">{value.comment}</td>
-          <td>
+          <td>{number}</td>
+          <td>{value.name}</td>
+          <td>{value.concern}</td>
+          <td>{value.date}</td>
+          <td>{value.type}</td>
+          <td>{value.form}</td>
+          <td>{value.comment}</td>
+          <td className="crm__tableBtn crm__tableBtn--download">
             <button
               className="auth__submit"
               onClick={() =>
@@ -72,7 +72,7 @@ class Korespondencja extends Component {
               Pobierz
             </button>
           </td>
-          <td>
+          <td className="crm__tableBtn">
             <button
               className="auth__submit"
               onClick={() => this.onButtonClick("EDIT", value, mailId)}
@@ -80,7 +80,7 @@ class Korespondencja extends Component {
               Edytuj
             </button>
           </td>
-          <td>
+          <td className="crm__tableBtn crm__tableBtn--close">
             <button
               className="auth__submit"
               onClick={() => this.deteleCrmMail(mailId, value.attachmentUrl)}
@@ -129,13 +129,13 @@ class Korespondencja extends Component {
           <table className="crm__table">
             <thead>
               <tr>
-                <th className="crm__table__th">LP</th>
-                <th className="crm__table__th">Nazwa</th>
-                <th className="crm__table__th">Dotyczy</th>
-                <th className="crm__table__th">Data dokumentu</th>
-                <th className="crm__table__th">Typ</th>
-                <th className="crm__table__th">Forma</th>
-                <th className="crm__table__th">Uwagi</th>
+                <th>LP</th>
+                <th>Nazwa</th>
+                <th>Dotyczy</th>
+                <th>Data dokumentu</th>
+                <th>Typ</th>
+                <th>Forma</th>
+                <th>Uwagi</th>
               </tr>
             </thead>
             <tbody>{this.showAddedMails(crmMails)}</tbody>

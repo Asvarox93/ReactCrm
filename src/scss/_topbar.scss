@@ -1,6 +1,8 @@
 .topbar {
   display: flex;
   flex-direction: column;
+  position: sticky;
+  top: 0;
   width: 20%;
   max-width: 23.75rem;
   height: 100vh;
@@ -8,6 +10,16 @@
   color: $topbar_color;
   box-sizing: border-box;
   padding: 0 0.8rem;
+
+  @media screen and (max-width: 925px) {
+    width: 40%;
+  }
+
+  //TODO: Hamburger do wyświetlania menu
+  @media screen and (max-width: 460px) {
+    position: fixed;
+    display: none;
+  }
 
   &__logotype {
     padding: 1.5rem 0;
@@ -44,6 +56,10 @@
     background-color: $topbar_logoutBtn-bgc;
     color: $topbar_logoutBtn-color;
     margin-top: 1rem;
+
+    &:hover {
+      background-color: darken($topbar_logoutBtn-bgc, 10%);
+    }
   }
 
   &__navbar {

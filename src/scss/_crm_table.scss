@@ -1,0 +1,77 @@
+.crm__table {
+  border: 1px solid $tables_border-color;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+
+  td:not(.crm__tableBtn),
+  th {
+    border: 1px solid $tables_tdBorder-color;
+    padding: 0.5rem;
+  }
+  tbody td {
+    font-size: 13px;
+    vertical-align: center;
+  }
+
+  tr:nth-child(even) {
+    background: $tables_tr-bgc;
+  }
+
+  thead {
+    background: $tables_thead-bgc;
+    background: $tables_thead-bgcG;
+
+    th {
+      font-size: 15px;
+      font-weight: 400;
+      color: $tables_th-color;
+      border-left: 2px solid $tables_thBorder-color;
+
+      &:first-child {
+        border-left: none;
+      }
+    }
+  }
+  &Btn {
+    border: 1px solid $tables_btnBorder-color;
+    width: 5rem;
+    background: $tables_btnEdit-color;
+    background: $tables_btnEdit-colorG;
+
+    &:hover {
+      background: $tables_btnEdit-color;
+    }
+
+    button {
+      margin: 0;
+      border-radius: 0;
+      text-align: left;
+      width: 100%;
+      background: none;
+      &:hover {
+        background: none;
+      }
+    }
+
+    &--history {
+      background: $tables_btnHistory-color;
+
+      &:hover {
+        background: $tables_btnHistory-colorH;
+      }
+    }
+    &--close {
+      background: $tables_btnClose-color;
+      &:hover {
+        background: $tables_btnClose-colorH;
+      }
+    }
+    &--download {
+      background: $tables_btnDownload-color;
+      &:hover {
+        background: $tables_btnDownload-colorH;
+      }
+    }
+  }
+}

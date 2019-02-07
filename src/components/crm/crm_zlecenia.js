@@ -66,13 +66,13 @@ class Zlecenia extends Component {
       if (value.status !== "zamknięte") {
         return (
           <tr key={key} client={value.client}>
-            <td className="crm__table__th">{number}</td>
-            <td className="crm__table__th">{value.client}</td>
-            <td className="crm__table__th">{value.addedDate}</td>
-            <td className="crm__table__th">{value.orderNote}</td>
-            <td className="crm__table__th">{value.status}</td>
-            <td className="crm__table__th">{value.worker}</td>
-            <td>
+            <td>{number}</td>
+            <td>{value.client}</td>
+            <td>{value.addedDate}</td>
+            <td>{value.orderNote}</td>
+            <td>{value.status}</td>
+            <td>{value.worker}</td>
+            <td className="crm__tableBtn">
               <button
                 className="auth__submit"
                 onClick={() => this.onButtonClick("EDIT", value, value.key)}
@@ -80,7 +80,7 @@ class Zlecenia extends Component {
                 Edytuj
               </button>
             </td>
-            <td>
+            <td className="crm__tableBtn crm__tableBtn--history">
               <button
                 className="auth__submit"
                 onClick={() => this.onButtonClick("HISTORY", value, value.key)}
@@ -88,7 +88,7 @@ class Zlecenia extends Component {
                 Działania
               </button>
             </td>
-            <td>
+            <td className="crm__tableBtn crm__tableBtn--close">
               <button
                 className="auth__submit"
                 onClick={() => this.closeCrmOrder(value.key)}
@@ -102,13 +102,13 @@ class Zlecenia extends Component {
       if (hideOrders === false) {
         return (
           <tr key={key} client={value.client}>
-            <td className="crm__table__th">{number}</td>
-            <td className="crm__table__th">{value.client}</td>
-            <td className="crm__table__th">{value.addedDate}</td>
-            <td className="crm__table__th">{value.orderNote}</td>
-            <td className="crm__table__th">{value.status}</td>
-            <td className="crm__table__th">{value.worker}</td>
-            <td>
+            <td>{number}</td>
+            <td>{value.client}</td>
+            <td>{value.addedDate}</td>
+            <td>{value.orderNote}</td>
+            <td>{value.status}</td>
+            <td>{value.worker}</td>
+            <td className="crm__tableBtn crm__tableBtn--history">
               <button
                 className="auth__submit"
                 onClick={() => this.onButtonClick("HISTORY", value, key)}
@@ -151,20 +151,26 @@ class Zlecenia extends Component {
 
     if (privileges.zlecenia === true) {
       return (
-        <div>
+        <div className="zlecenia">
           {this.showOrdersModal(modalActive)}
-          <div>Dane do wyświetlenia pracowników:</div>
-          <input
-            type="text"
-            value={searchOrders}
-            onChange={this.searchOrders.bind(this)}
-          />
-          <button
-            className="auth__submit"
-            onClick={() => this.onButtonClick("ADD")}
-          >
-            Dodaj
-          </button>
+          <div className="zlecenia__title">
+            Dane do wyświetlenia pracowników:
+          </div>
+          <div className="zlecenia__search">
+            <input
+              type="text"
+              className="zlecenia__searchInput"
+              placeholder="Wyszukaj po nazwie klienta"
+              value={searchOrders}
+              onChange={this.searchOrders.bind(this)}
+            />
+            <button
+              className="auth__submit zlecenia__searchBtn"
+              onClick={() => this.onButtonClick("ADD")}
+            >
+              Dodaj Zlecenie
+            </button>
+          </div>
           <label>
             <input
               type="checkbox"
@@ -173,22 +179,21 @@ class Zlecenia extends Component {
             />
             Ukryj zakończone zlecenia
           </label>
-
           <table className="crm__table">
             <thead>
               <tr>
-                <th className="crm__table__th">LP</th>
-                <th className="crm__table__th">Nazwa klienta</th>
-                <th className="crm__table__th">
+                <th>LP</th>
+                <th>Nazwa klienta</th>
+                <th>
                   Data dodania{" "}
                   <span onClick={() => this.onDataFilterChange("desc")}>
                     /\
                   </span>
                   <span onClick={() => this.onDataFilterChange("asc")}>\/</span>
                 </th>
-                <th className="crm__table__th">Treść zlecenia</th>
-                <th className="crm__table__th">Status</th>
-                <th className="crm__table__th">Pracownik</th>
+                <th>Treść zlecenia</th>
+                <th>Status</th>
+                <th>Pracownik</th>
               </tr>
             </thead>
             <tbody>{this.showAddedOrders(crmOrders)}</tbody>

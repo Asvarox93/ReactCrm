@@ -50,10 +50,19 @@
     text-transform: uppercase;
     text-align: center;
     font-weight: 400;
-    border-radius: 0.2rem;
+    border: none;
+    border-radius: 0.4rem;
     background-color: $auth_submit-bgc;
     color: $auth_submit-color;
     margin-top: 1rem;
+
+    &:hover {
+      background-color: darken($auth_submit-bgc, 10%);
+    }
+
+    &:focus {
+      outline: none;
+    }
   }
 
   &__register {

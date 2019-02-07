@@ -186,10 +186,15 @@ html {
   text-transform: uppercase;
   text-align: center;
   font-weight: 400;
-  border-radius: 0.2rem;
+  border: none;
+  border-radius: 0.4rem;
   background-color: #0072bc;
   color: #fff;
   margin-top: 1rem; }
+  .auth__submit:hover {
+    background-color: #005389; }
+  .auth__submit:focus {
+    outline: none; }
 
 .auth__register {
   margin-top: 1rem; }
@@ -230,6 +235,8 @@ html {
 .topbar {
   display: flex;
   flex-direction: column;
+  position: sticky;
+  top: 0;
   width: 20%;
   max-width: 23.75rem;
   height: 100vh;
@@ -237,6 +244,13 @@ html {
   color: #fff;
   box-sizing: border-box;
   padding: 0 0.8rem; }
+  @media screen and (max-width: 925px) {
+    .topbar {
+      width: 40%; } }
+  @media screen and (max-width: 460px) {
+    .topbar {
+      position: fixed;
+      display: none; } }
   .topbar__logotype {
     padding: 1.5rem 0;
     display: flex;
@@ -264,6 +278,8 @@ html {
     background-color: #0072bc;
     color: #fff;
     margin-top: 1rem; }
+    .topbar__userLogout:hover {
+      background-color: #005389; }
   .topbar__navbar {
     margin-top: 2rem;
     display: flex;
@@ -280,6 +296,91 @@ html {
       .topbar__navlink a:hover {
         color: #0072bc; }
 
+.dashboard {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center; }
+  .dashboard__box {
+    box-sizing: content-box;
+    width: 100%;
+    margin: 1rem;
+    padding: 3rem;
+    border: 1px solid #d6d6d6;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: ease-in-out 0.2s; }
+    @media screen and (min-width: 925px) and (max-width: 1280px) {
+      .dashboard__box {
+        max-width: 15rem; } }
+    @media screen and (min-width: 1280px) {
+      .dashboard__box {
+        max-width: 22rem; } }
+    .dashboard__box:hover {
+      transform: scale(1.05);
+      transition: ease-in-out 0.2s;
+      border-color: #0072bc; }
+  .dashboard__title {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    text-align: center;
+    color: #000; }
+
+.crm__table {
+  border: 1px solid #1c6ea4;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse; }
+  .crm__table td:not(.crm__tableBtn),
+  .crm__table th {
+    border: 1px solid #aaaaaa;
+    padding: 0.5rem; }
+  .crm__table tbody td {
+    font-size: 13px;
+    vertical-align: center; }
+  .crm__table tr:nth-child(even) {
+    background: #d0e4f5; }
+  .crm__table thead {
+    background: #1c6ea4;
+    background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1c6ea4 100%); }
+    .crm__table thead th {
+      font-size: 15px;
+      font-weight: 400;
+      color: #fff;
+      border-left: 2px solid #d0e4f5; }
+      .crm__table thead th:first-child {
+        border-left: none; }
+  .crm__tableBtn {
+    border: 1px solid #aaaaaa;
+    width: 5rem;
+    background: #0072bc;
+    background: linear-gradient(to bottom, #67abd8 0%, #1970aa 66%, #024a7a 100%); }
+    .crm__tableBtn:hover {
+      background: #0072bc; }
+    .crm__tableBtn button {
+      margin: 0;
+      border-radius: 0;
+      text-align: left;
+      width: 100%;
+      background: none; }
+      .crm__tableBtn button:hover {
+        background: none; }
+    .crm__tableBtn--history {
+      background: linear-gradient(to bottom, #9e9d9c 0%, #585857 66%, #313030 100%); }
+      .crm__tableBtn--history:hover {
+        background: linear-gradient(to bottom, #6b6a69 0%, #252524 66%, black 100%); }
+    .crm__tableBtn--close {
+      background: linear-gradient(to bottom, #f56f81 0%, #d12121 66%, #a80000 100%); }
+      .crm__tableBtn--close:hover {
+        background: linear-gradient(to bottom, #ee102e 0%, #791313 66%, #420000 100%); }
+    .crm__tableBtn--download {
+      background: linear-gradient(to bottom, #5fbe5f 0%, #32a123 66%, #039730 100%); }
+      .crm__tableBtn--download:hover {
+        background: linear-gradient(to bottom, #44a644 0%, #25771a 66%, #026520 100%); }
+
 .formModal {
   background-color: black;
   color: #fff;
@@ -290,3 +391,24 @@ html {
   z-index: 999; }
   .formModal label {
     color: #fff; }
+
+.zlecenia {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem; }
+  .zlecenia__title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem; }
+  .zlecenia__search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem; }
+    .zlecenia__searchInput {
+      width: calc(80% - 1rem);
+      height: 2rem;
+      margin-right: 1rem;
+      font-size: 1rem; }
+    .zlecenia__searchBtn {
+      margin: 0;
+      width: 20%; }

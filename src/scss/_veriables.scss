@@ -38,3 +38,66 @@ $topbar_logoutBtn-color: #fff;
 $topbar_navbar-color: #fff;
 $topbar_navbar-colorH: $main_color;
 $topbar_navbar-border: rgba(255, 255, 255, 0.2);
+
+//  DASHBOARD
+$dashboard_box-border: #d6d6d6;
+$dashboard_box-borderH: $main_color;
+$dashboard_title-color: #000;
+
+//  CRM_TABLES
+$tables_border-color: #1c6ea4;
+$tables_tdBorder-color: #aaaaaa;
+$tables_tr-bgc: #d0e4f5;
+$tables_thead-bgc: #1c6ea4;
+$tables_thead-bgcG: linear-gradient(
+  to bottom,
+  #5592bb 0%,
+  #327cad 66%,
+  #1c6ea4 100%
+);
+$tables_th-color: #fff;
+$tables_thBorder-color: #d0e4f5;
+$tables_btnBorder-color: #aaaaaa;
+$tables_btnEdit-color: $main_color;
+$tables_btnEdit-colorG: linear-gradient(
+  to bottom,
+  #67abd8 0%,
+  #1970aa 66%,
+  #024a7a 100%
+);
+$tables_btnClose-color: linear-gradient(
+  to bottom,
+  #f56f81 0%,
+  #d12121 66%,
+  #a80000 100%
+);
+$tables_btnClose-colorH: linear-gradient(
+  to bottom,
+  darken(#f56f81, 20%) 0%,
+  darken(#d12121, 20%) 66%,
+  darken(#a80000, 20%) 100%
+);
+$tables_btnHistory-color: linear-gradient(
+  to bottom,
+  #9e9d9c 0%,
+  #585857 66%,
+  #313030 100%
+);
+$tables_btnHistory-colorH: linear-gradient(
+  to bottom,
+  darken(#9e9d9c, 20%) 0%,
+  darken(#585857, 20%) 66%,
+  darken(#313030, 20%) 100%
+);
+$tables_btnDownload-color: linear-gradient(
+  to bottom,
+  #5fbe5f 0%,
+  #32a123 66%,
+  #039730 100%
+);
+$tables_btnDownload-colorH: linear-gradient(
+  to bottom,
+  darken(#5fbe5f, 10%) 0%,
+  darken(#32a123, 10%) 66%,
+  darken(#039730, 10%) 100%
+);

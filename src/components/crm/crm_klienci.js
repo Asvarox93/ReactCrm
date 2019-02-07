@@ -50,24 +50,24 @@ class Klienci extends Component {
 
       return (
         <tr key={key} name={value.name}>
-          <td className="crm__table__th">{number}</td>
-          <td className="crm__table__th">{value.name}</td>
-          <td className="crm__table__th">{value.nip}</td>
-          <td className="crm__table__th">
+          <td>{number}</td>
+          <td>{value.name}</td>
+          <td>{value.nip}</td>
+          <td>
             <a href={`mailto:${value.email}`} data-rel="external">
               {value.email}
             </a>
           </td>
-          <td className="crm__table__th">
+          <td>
             <a href={`tel:${value.tel}`} data-rel="external">
               {value.tel}
             </a>
           </td>
-          <td className="crm__table__th">{value.road}</td>
-          <td className="crm__table__th">{value.code}</td>
-          <td className="crm__table__th">{value.city}</td>
-          <td className="crm__table__th">{value.comment}</td>
-          <td>
+          <td>{value.road}</td>
+          <td>{value.code}</td>
+          <td>{value.city}</td>
+          <td>{value.comment}</td>
+          <td className="crm__tableBtn">
             <button
               className="auth__submit"
               onClick={() => this.onButtonClick("EDIT", value, key)}
@@ -75,7 +75,7 @@ class Klienci extends Component {
               Edytuj
             </button>
           </td>
-          <td>
+          <td className="crm__tableBtn crm__tableBtn--close">
             <button
               className="auth__submit"
               onClick={() => this.deteleCrmClient(key)}
@@ -124,15 +124,15 @@ class Klienci extends Component {
           <table className="crm__table">
             <thead>
               <tr>
-                <th className="crm__table__th">LP</th>
-                <th className="crm__table__th">Nazwa</th>
-                <th className="crm__table__th">NIP</th>
-                <th className="crm__table__th">E-mail</th>
-                <th className="crm__table__th">Telefon</th>
-                <th className="crm__table__th">Ulica</th>
-                <th className="crm__table__th">Kod pocztowy</th>
-                <th className="crm__table__th">Miasto</th>
-                <th className="crm__table__th">Uwagi</th>
+                <th>LP</th>
+                <th>Nazwa</th>
+                <th>NIP</th>
+                <th>E-mail</th>
+                <th>Telefon</th>
+                <th>Ulica</th>
+                <th>Kod pocztowy</th>
+                <th>Miasto</th>
+                <th>Uwagi</th>
               </tr>
             </thead>
             <tbody>{this.showAddedClients(crmClients)}</tbody>

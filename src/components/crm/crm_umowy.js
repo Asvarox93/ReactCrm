@@ -55,13 +55,13 @@ class Umowy extends Component {
       const contractId = value.contractId;
       return (
         <tr key={key} name={value.name}>
-          <td className="crm__table__th">{number}</td>
-          <td className="crm__table__th">{value.name}</td>
-          <td className="crm__table__th">{value.contractDate}</td>
-          <td className="crm__table__th">{value.deadlineDate}</td>
-          <td className="crm__table__th">{value.type}</td>
-          <td className="crm__table__th">{value.comment}</td>
-          <td>
+          <td>{number}</td>
+          <td>{value.name}</td>
+          <td>{value.contractDate}</td>
+          <td>{value.deadlineDate}</td>
+          <td>{value.type}</td>
+          <td>{value.comment}</td>
+          <td className="crm__tableBtn crm__tableBtn--download">
             <button
               className="auth__submit"
               onClick={() =>
@@ -71,7 +71,7 @@ class Umowy extends Component {
               Pobierz
             </button>
           </td>
-          <td>
+          <td className="crm__tableBtn">
             <button
               className="auth__submit"
               onClick={() => this.onButtonClick("EDIT", value, contractId)}
@@ -79,7 +79,7 @@ class Umowy extends Component {
               Edytuj
             </button>
           </td>
-          <td>
+          <td className="crm__tableBtn crm__tableBtn--close">
             <button
               className="auth__submit"
               onClick={() =>
@@ -135,12 +135,12 @@ class Umowy extends Component {
           <table className="crm__table">
             <thead>
               <tr>
-                <th className="crm__table__th">LP</th>
-                <th className="crm__table__th">Nazwa klienta</th>
-                <th className="crm__table__th">Data zawarcia</th>
-                <th className="crm__table__th">Termin realizacji</th>
-                <th className="crm__table__th">Typ</th>
-                <th className="crm__table__th">Uwagi</th>
+                <th>LP</th>
+                <th>Nazwa klienta</th>
+                <th>Data zawarcia</th>
+                <th>Termin realizacji</th>
+                <th>Typ</th>
+                <th>Uwagi</th>
               </tr>
             </thead>
             <tbody>{this.showAddedContracts(crmContracts)}</tbody>

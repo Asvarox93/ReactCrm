@@ -61,23 +61,18 @@ class Pracownicy extends Component {
 
       return (
         <tr key={key} worker={value.username}>
-          <td className="crm__table__th">{number}</td>
-          <td className="crm__table__th">{value.username}</td>
-          <td className="crm__table__th">{value.email}</td>
-          <td className="crm__table__th">
-            <ul>
-              <li>Dashboard: {value.privileges.dashboard ? "Tak" : "Nie"}</li>
-              <li>Klienci: {value.privileges.klienci ? "Tak" : "Nie"}</li>
-              <li>Pracownicy: {value.privileges.pracownicy ? "Tak" : "Nie"}</li>
-              <li>Zlecenia: {value.privileges.zlecenia ? "Tak" : "Nie"}</li>
-              <li>
-                Korespondencja:
-                {value.privileges.korespondencja ? "Tak" : "Nie"}
-              </li>
-              <li>Umowy: {value.privileges.umowy ? "Tak" : "Nie"}</li>
-            </ul>
-          </td>
-          <td>
+          <td>{number}</td>
+          <td>{value.username}</td>
+          <td>{value.email}</td>
+
+          <td>{value.privileges.dashboard ? "Tak" : "Nie"}</td>
+          <td>{value.privileges.klienci ? "Tak" : "Nie"}</td>
+          <td>{value.privileges.pracownicy ? "Tak" : "Nie"}</td>
+          <td>{value.privileges.zlecenia ? "Tak" : "Nie"}</td>
+          <td>{value.privileges.korespondencja ? "Tak" : "Nie"}</td>
+          <td>{value.privileges.umowy ? "Tak" : "Nie"}</td>
+
+          <td className="crm__tableBtn">
             <button
               className="auth__submit"
               onClick={() => this.onButtonClick("EDIT", value, key)}
@@ -85,7 +80,7 @@ class Pracownicy extends Component {
               Edytuj
             </button>
           </td>
-          <td>
+          <td className="crm__tableBtn crm__tableBtn--close">
             <button
               className="auth__submit"
               onClick={() => this.deteleCrmUser(key, value.role)}
@@ -134,10 +129,16 @@ class Pracownicy extends Component {
           <table className="crm__table">
             <thead>
               <tr>
-                <th className="crm__table__th">LP</th>
-                <th className="crm__table__th">Imię i nazwisko</th>
-                <th className="crm__table__th">Adres e-mail</th>
-                <th className="crm__table__th">Przywileje</th>
+                <th>LP</th>
+                <th>Imię i nazwisko</th>
+                <th>Adres e-mail</th>
+
+                <th>Dashboard</th>
+                <th>Klienci</th>
+                <th>Pracownicy</th>
+                <th>Zlecenia</th>
+                <th>Korespondencja</th>
+                <th>Umowy</th>
               </tr>
             </thead>
             <tbody>{this.showAddedUsers(crmUsers)}</tbody>

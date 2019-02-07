@@ -1,0 +1,40 @@
+.dashboard {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  &__box {
+    box-sizing: content-box;
+    width: 100%;
+    margin: 1rem;
+    padding: 3rem;
+    border: 1px solid $dashboard_box-border;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: ease-in-out 0.2s;
+
+    @media screen and (min-width: 925px) and (max-width: 1280px) {
+      max-width: 15rem;
+    }
+    @media screen and (min-width: 1280px) {
+      max-width: 22rem;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+      transition: ease-in-out 0.2s;
+      border-color: $dashboard_box-borderH;
+    }
+  }
+
+  &__title {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    text-align: center;
+    color: $dashboard_title-color;
+  }
+}
