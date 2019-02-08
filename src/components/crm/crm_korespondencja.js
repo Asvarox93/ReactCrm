@@ -145,9 +145,6 @@ class Korespondencja extends Component {
             </thead>
             <tbody>{this.showAddedMails(crmMails)}</tbody>
           </table>
-
-          {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
-          {/* Component dodawania użytkownika powinien zawierać: Pole nickname, email, password i uid administratora */}
         </div>
       );
     } else {

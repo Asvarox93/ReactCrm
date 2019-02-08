@@ -142,9 +142,6 @@ class OrderRegisterModal extends Component {
               </button>
             </div>
           </form>
-
-          {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
-          {/* Component dodawania użytkownika powinien zawierać: Pole nickname, email, password i uid administratora */}
         </div>
       );
     } else {
@@ -176,7 +173,6 @@ class OrderRegisterModal extends Component {
 }
 function validate(values) {
   const errors = [];
-  //TODO: Validacja formularza
   return errors;
 }
 

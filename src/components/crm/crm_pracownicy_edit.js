@@ -169,7 +169,6 @@ class UserEditModal extends Component {
 }
 function validate(values) {
   const errors = [];
-  //TODO: Validacja formularza
   return errors;
 }
 

@@ -150,9 +150,6 @@ class Umowy extends Component {
             </thead>
             <tbody>{this.showAddedContracts(crmContracts)}</tbody>
           </table>
-
-          {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
-          {/* Component dodawania użytkownika powinien zawierać: Pole nickname, email, password i uid administratora */}
         </div>
       );
     } else {

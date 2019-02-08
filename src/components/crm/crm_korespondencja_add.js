@@ -198,9 +198,6 @@ class MailRegisterModal extends Component {
               </button>
             </div>
           </form>
-
-          {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
-          {/* Component dodawania użytkownika powinien zawierać: Pole nickname, email, password i uid administratora */}
         </div>
       );
     } else {
@@ -218,7 +215,7 @@ class MailRegisterModal extends Component {
   }
   componentDidMount() {
     const dateObj = new Date();
-    const month = dateObj.getUTCMonth() + 1; //months from 1-12
+    const month = dateObj.getUTCMonth() + 1;
     const day = dateObj.getUTCDate();
     const year = dateObj.getUTCFullYear();
     const newdate = year + "-" + month + "-" + day;
@@ -232,7 +229,6 @@ class MailRegisterModal extends Component {
 }
 function validate(values) {
   const errors = [];
-  //TODO: Validacja formularza
   return errors;
 }
 

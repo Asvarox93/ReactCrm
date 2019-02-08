@@ -32,7 +32,6 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
     .createUserWithEmailAndPassword(email, pass)
     .then(() => {
       const user = firebase.auth().currentUser;
-      //TODO: do zrobienia przy weryfikacji Then i Catch.
       user.sendEmailVerification();
       user
         .updateProfile({
@@ -69,18 +68,15 @@ export const createUser = (email, pass, nickname, callback) => dispatch => {
                     callback();
                   })
                   .catch(error => {
-                    //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
                     dispatch(createUserFail(error));
                   });
               })
               .catch(error => {
-                //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
                 dispatch(createUserFail(error));
               });
           });
         })
         .catch(error => {
-          //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
           dispatch(createUserFail(error));
         });
     })
@@ -123,7 +119,6 @@ export const createUserSuccess = resp => {
 };
 
 export const createUserFail = error => {
-  //TODO: dorobienie ifów na error.code (na wzór z dokumentacji)
   if (error.code === "auth/email-already-in-use") {
     return {
       type: CREATE_USER_FAIL,
@@ -167,7 +162,6 @@ export const loginUserSuccess = resp => {
 };
 
 export const loginUserFail = error => {
-  //TODO: dorobienie ifów na error.code (na wzór z dokumentacji)
   if (error.code === "auth/user-not-found") {
     return {
       type: LOGIN_USER_FAIL,
@@ -189,7 +183,6 @@ export const onSignOut = () => dispatch => {
       return dispatch({ type: SIGN_OUT });
     })
     .catch(error => {
-      //TODO: odwołanie
       console.log(error);
     });
 };
@@ -209,7 +202,6 @@ export const createCrmUser = (
     .createUserWithEmailAndPassword(email, pass)
     .then(() => {
       const user = firebase.auth().currentUser;
-      //TODO: do zrobienia przy weryfikacji Then i Catch.
       user.sendEmailVerification();
       user
         .updateProfile({
@@ -239,13 +231,11 @@ export const createCrmUser = (
               callback();
             })
             .catch(error => {
-              //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
               dispatch(createUserFail(error));
             });
         });
     })
     .catch(error => {
-      //TODO: Do przerobienia dispatch (jest on z tworzenia uzytkownia nie wysyłania maila weryfikującego).
       dispatch(createUserFail(error));
     });
 };
@@ -275,7 +265,6 @@ export const editCrmUser = (
       dispatch(getCrmUsers(crmKey));
       callback();
     });
-  //TODO: update danych w bazie i ewentualnie w użytkowniku przez cloud functions.
   return;
 };
 
@@ -295,9 +284,7 @@ export const deleteCrmUser = (userUid, crmKey) => dispatch => {
           });
       }
     })
-    .catch(err => {
-      //TODO: catch err
-    });
+    .catch(err => {});
   return;
 };
 
@@ -364,19 +351,14 @@ export const createCrmClient = (
           comment
         })
         .then(() => {
-          // dispatch(createSuccess(user));
           dispatch(getCrmClients(crmKey));
           callback();
         })
         .catch(error => {
           console.log("KlientADD: ", error);
-          //TODO: Do przerobienia dispatch
-          //  dispatch(createUserFail(error));
         });
     })
-    .catch(error => {
-      //TODO: Do zrobieniaw wyjątek
-    });
+    .catch(error => {});
 };
 
 const createCrmClientID = (crmKey, crypto = "") => {
@@ -451,14 +433,11 @@ export const editCrmClient = (
       comment
     })
     .then(() => {
-      // dispatch(createSuccess(user));
       dispatch(getCrmClients(crmKey));
       callback();
     })
     .catch(error => {
       console.log("ClientEdit: ", error);
-      //TODO: Do przerobienia dispatch
-      //  dispatch(createUserFail(error));
     });
 };
 
@@ -467,7 +446,6 @@ export const getCrmClients = crmKey => dispatch => {
     .database()
     .ref("crm/" + crmKey + "/klienci")
     .once("value", snapshot => {
-      console.log("getCrmClientsVal: ", snapshot.val());
       dispatch(getCrmClientsSuccess(snapshot.val()));
     });
 };
@@ -510,19 +488,14 @@ export const createCrmOrder = (
           worker
         })
         .then(() => {
-          // dispatch(createSuccess(user));
           dispatch(getCrmOrders(crmKey));
           callback();
         })
         .catch(error => {
           console.log("OrderADD: ", error);
-          //TODO: Do przerobienia dispatch
-          //  dispatch(createUserFail(error));
         });
     })
-    .catch(error => {
-      //TODO: Do zrobieniaw wyjątek
-    });
+    .catch(error => {});
 };
 
 const createCrmOrderID = (crmKey, crypto = "") => {
@@ -590,14 +563,11 @@ export const editCrmOrder = (
       worker
     })
     .then(() => {
-      // dispatch(createSuccess(user));
       dispatch(getCrmOrders(crmKey));
       callback();
     })
     .catch(error => {
       console.log("OrderEdit: ", error);
-      //TODO: Do przerobienia dispatch
-      //  dispatch(createUserFail(error));
     });
 };
 
@@ -621,14 +591,11 @@ export const historyCrmOrder = (
         history
       })
       .then(() => {
-        // dispatch(createSuccess(user));
         dispatch(getCrmOrders(crmKey));
         callback();
       })
       .catch(error => {
         console.log("OrderEdit: ", error);
-        //TODO: Do przerobienia dispatch
-        //  dispatch(createUserFail(error));
       });
   });
 };
@@ -804,19 +771,14 @@ export const createCrmMail = (
             "crm/" + crmKey + "/korespondencja/" + dateT + "/" + attachment.name
         })
         .then(() => {
-          // dispatch(createSuccess(user));
           dispatch(getCrmMails(crmKey));
           callback();
         })
         .catch(error => {
           console.log("mailADD: ", error);
-          //TODO: Do przerobienia dispatch
-          //  dispatch(createUserFail(error));
         });
     })
-    .catch(error => {
-      //TODO: Do zrobieniaw wyjątek
-    });
+    .catch(error => {});
 };
 
 const createCrmMailID = (crmKey, crypto = "") => {
@@ -929,14 +891,11 @@ export const editCrmMail = (
       comment
     })
     .then(() => {
-      // dispatch(createSuccess(user));
       dispatch(getCrmMails(crmKey));
       callback();
     })
     .catch(error => {
       console.log("MailEdit: ", error);
-      //TODO: Do przerobienia dispatch
-      //  dispatch(createUserFail(error));
     });
 };
 
@@ -1049,19 +1008,14 @@ export const createCrmContract = (
             "crm/" + crmKey + "/umowy/" + dateT + "/" + attachment.name
         })
         .then(() => {
-          // dispatch(createSuccess(user));
           dispatch(getCrmContracts(crmKey));
           callback();
         })
         .catch(error => {
           console.log("ContractADD: ", error);
-          //TODO: Do przerobienia dispatch
-          //  dispatch(createUserFail(error));
         });
     })
-    .catch(error => {
-      //TODO: Do zrobieniaw wyjątek
-    });
+    .catch(error => {});
 };
 
 const createCrmContractID = (crmKey, crypto = "") => {
@@ -1172,14 +1126,11 @@ export const editCrmContract = (
       comment
     })
     .then(() => {
-      // dispatch(createSuccess(user));
       dispatch(getCrmContracts(crmKey));
       callback();
     })
     .catch(error => {
       console.log("ContractEdit: ", error);
-      //TODO: Do przerobienia dispatch
-      //  dispatch(createUserFail(error));
     });
 };
 
