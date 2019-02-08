@@ -13,9 +13,9 @@ class OrderEditModal extends Component {
   renderField(field) {
     if (field.type === "select") {
       return (
-        <div className="auth__field">
+        <div className="auth__field formModal__field">
           <label className="auth__label">{field.label}</label>
-          <select {...field.input} className="auth__select">
+          <select {...field.input} className="auth__select formModal__select">
             <option disabled>Wybierz</option>
             {field.children}
           </select>
@@ -28,9 +28,12 @@ class OrderEditModal extends Component {
 
     if (field.type === "textarea") {
       return (
-        <div className="auth__field">
+        <div className="auth__field formModal__field">
           <label className="auth__label">{field.label}</label>
-          <textarea {...field.input} className="auth__textarea" />
+          <textarea
+            {...field.input}
+            className="auth__textarea formModal__textarea"
+          />
           <p className="auth__errors">
             {field.meta.touched ? field.meta.error : ""}
           </p>
@@ -38,9 +41,13 @@ class OrderEditModal extends Component {
       );
     }
     return (
-      <div className="auth__field">
+      <div className="auth__field formModal__field">
         <label className="auth__label">{field.label}</label>
-        <input {...field.input} type={field.type} className="auth__input" />
+        <input
+          {...field.input}
+          type={field.type}
+          className="auth__input formModal__input"
+        />
         <p className="auth__errors">
           {field.meta.touched ? field.meta.error : ""}
         </p>
@@ -85,11 +92,9 @@ class OrderEditModal extends Component {
     if (privileges.zlecenia === true) {
       return (
         <div className="formModal">
-          <div>Formularz dodawania zlecenia:</div>
-
           <form
             onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
-            className="auth__form"
+            className="formModal__form"
           >
             <h2 className="auth__title">Formularz dodawania nowego zlecenia</h2>
             {this.props.authRegisterError}
@@ -139,14 +144,16 @@ class OrderEditModal extends Component {
                 );
               })}
             </Field>
-            <button className="auth__submit">Dodaj</button>
-            <button
-              type="button"
-              onClick={this.closeOrderModal.bind(this)}
-              className="panel__btn panel__btn--return"
-            >
-              Zamknij
-            </button>
+            <div className="formModal__btnGroup">
+              <button className="auth__submit">Dodaj</button>
+              <button
+                type="button"
+                onClick={this.closeOrderModal.bind(this)}
+                className="auth__submit formModal__btnClose"
+              >
+                Zamknij
+              </button>
+            </div>
           </form>
 
           {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
@@ -159,7 +166,7 @@ class OrderEditModal extends Component {
           <div>
             Nie masz wystarczających uprawnień do wyświetlenia tej zawartości.
           </div>
-          <Link to="/crm" className="panel__btn panel__btn--return">
+          <Link to="/crm" className="auth__submit formModal__btnClose">
             Cofnij
           </Link>
         </div>

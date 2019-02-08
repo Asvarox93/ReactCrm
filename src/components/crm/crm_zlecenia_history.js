@@ -8,10 +8,9 @@ import { historyCrmOrder, onModalOff } from "../../action/index";
 class OrderHistoryModal extends Component {
   renderField(field) {
     return (
-      <div className="auth__field">
-        <label className="auth__label">{field.label}</label>
-        <textarea {...field.input} className="auth__textarea" />
-        <p className="auth__errors">
+      <div className="history__field">
+        <textarea {...field.input} className="history__textarea" />
+        <p className="history__errors">
           {field.meta.touched ? field.meta.error : ""}
         </p>
       </div>
@@ -43,10 +42,11 @@ class OrderHistoryModal extends Component {
       const currentHistory = Object.entries(history).map(([key, value]) => {
         return (
           <div key={key} date={value.date}>
-            <h6>
-              Dodane przez: {value.user} w dniu {value.date}
-            </h6>
             <p>{value.history}</p>
+            <h6>
+              Dodane przez: <span>{value.user}</span> w dniu{" "}
+              <span>{value.date}</span>
+            </h6>
           </div>
         );
       });
@@ -64,9 +64,9 @@ class OrderHistoryModal extends Component {
 
     if (privileges.zlecenia === true) {
       return (
-        <div className="formModal">
-          <div>Historia działań</div>
-          <div className="auth_history">
+        <div className="history">
+          <div className="history__title">Historia działań</div>
+          <div className="history__content">
             {_.orderBy(
               this.getCurrentHistory(crmOrder.history),
               ["props.date"],
@@ -75,23 +75,24 @@ class OrderHistoryModal extends Component {
           </div>
           <form
             onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
-            className="auth__form"
+            className="history__form"
           >
-            <h2 className="auth__title">Dodaj działanie</h2>
+            <h2 className="history__title">Dodaj działanie</h2>
             <Field
               type="textarea"
-              label="Treść zlecenia"
               name="history"
               component={this.renderField}
             />
-            <button className="auth__submit">Dodaj</button>
-            <button
-              type="button"
-              onClick={this.closeOrderModal.bind(this)}
-              className="panel__btn panel__btn--return"
-            >
-              Zamknij
-            </button>
+            <div className="history__btnGroup">
+              <button className="auth__submit">Dodaj</button>
+              <button
+                type="button"
+                onClick={this.closeOrderModal.bind(this)}
+                className="auth__submit history__btnClose"
+              >
+                Zamknij
+              </button>
+            </div>
           </form>
 
           {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
@@ -104,7 +105,7 @@ class OrderHistoryModal extends Component {
           <div>
             Nie masz wystarczających uprawnień do wyświetlenia tej zawartości.
           </div>
-          <Link to="/crm" className="panel__btn panel__btn--return">
+          <Link to="/crm" className="auth__submit history__addBtn--close">
             Cofnij
           </Link>
         </div>

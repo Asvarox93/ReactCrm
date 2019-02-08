@@ -151,21 +151,19 @@ class Zlecenia extends Component {
 
     if (privileges.zlecenia === true) {
       return (
-        <div className="zlecenia">
+        <div className="module">
           {this.showOrdersModal(modalActive)}
-          <div className="zlecenia__title">
-            Dane do wyświetlenia pracowników:
-          </div>
-          <div className="zlecenia__search">
+          <div className="module__title">Dane do wyświetlenia pracowników:</div>
+          <div className="module__search">
             <input
               type="text"
-              className="zlecenia__searchInput"
+              className="module__searchInput"
               placeholder="Wyszukaj po nazwie klienta"
               value={searchOrders}
               onChange={this.searchOrders.bind(this)}
             />
             <button
-              className="auth__submit zlecenia__searchBtn"
+              className="auth__submit module__addBtn"
               onClick={() => this.onButtonClick("ADD")}
             >
               Dodaj Zlecenie

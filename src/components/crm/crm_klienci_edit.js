@@ -7,9 +7,13 @@ import { editCrmClient, onModalOff } from "../../action/index";
 class ClientsEditModal extends Component {
   renderField(field) {
     return (
-      <div className="auth__field">
+      <div className="auth__field formModal__field">
         <label className="auth__label">{field.label}</label>
-        <input {...field.input} type={field.type} className="auth__input" />
+        <input
+          {...field.input}
+          type={field.type}
+          className="auth__input formModal__input"
+        />
         <p className="auth__errors">
           {field.meta.touched ? field.meta.error : ""}
         </p>
@@ -56,11 +60,9 @@ class ClientsEditModal extends Component {
     if (privileges.klienci === true) {
       return (
         <div className="formModal">
-          <div>Formularz edycji klienta:</div>
-
           <form
             onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
-            className="auth__form"
+            className="formModal__form"
           >
             <h2 className="auth__title">Formularz edycji klienta</h2>
             {this.props.authRegisterError}
@@ -112,14 +114,16 @@ class ClientsEditModal extends Component {
               name="comment"
               component={this.renderField}
             />
-            <button className="auth__submit">Dodaj</button>
-            <button
-              type="button"
-              onClick={this.closeClientModal.bind(this)}
-              className="panel__btn panel__btn--return"
-            >
-              Zamknij
-            </button>
+            <div className="formModal__btnGroup">
+              <button className="auth__submit">Dodaj</button>
+              <button
+                type="button"
+                onClick={this.closeClientModal.bind(this)}
+                className="auth__submit formModal__btnClose"
+              >
+                Zamknij
+              </button>
+            </div>
           </form>
 
           {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
@@ -132,7 +136,7 @@ class ClientsEditModal extends Component {
           <div>
             Nie masz wystarczających uprawnień do wyświetlenia tej zawartości.
           </div>
-          <Link to="/crm" className="panel__btn panel__btn--return">
+          <Link to="/crm" className="auth__submit formModal__btnClose">
             Cofnij
           </Link>
         </div>

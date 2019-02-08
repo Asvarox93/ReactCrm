@@ -1,11 +1,13 @@
 .crm__table {
-  border: 1px solid $tables_border-color;
+  //border: 1px solid $tables_border-color;
   width: 100%;
   text-align: left;
   border-collapse: collapse;
 
-  td:not(.crm__tableBtn),
   th {
+    padding: 0.5rem;
+  }
+  td:not(.crm__tableBtn) {
     border: 1px solid $tables_tdBorder-color;
     padding: 0.5rem;
   }
@@ -25,11 +27,17 @@
     th {
       font-size: 15px;
       font-weight: 400;
+      box-sizing: border-box;
       color: $tables_th-color;
       border-left: 2px solid $tables_thBorder-color;
 
       &:first-child {
         border-left: none;
+        border-radius: 0.5rem 0 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 0.5rem 0 0;
       }
     }
   }

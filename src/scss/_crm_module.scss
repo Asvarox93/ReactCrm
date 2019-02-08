@@ -1,0 +1,38 @@
+.module {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+
+  &__title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  &__search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    &Input {
+      width: calc(80% - 1rem);
+      height: 2rem;
+      margin-right: 1rem;
+      font-size: 1rem;
+      padding-left: 0.5rem;
+      border: 1px solid $module_input-borderC;
+      border-radius: 0.5rem;
+      transition: ease-in-out 0.2s;
+
+      &:focus {
+        border: 1px solid darken($module_input-borderC, 20%);
+        border-radius: 1rem;
+        outline: none;
+        transition: ease-in-out 0.2s;
+      }
+    }
+  }
+  &__addBtn {
+    margin: 0;
+    width: 20%;
+  }
+}

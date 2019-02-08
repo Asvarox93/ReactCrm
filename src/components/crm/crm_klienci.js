@@ -106,21 +106,24 @@ class Klienci extends Component {
 
     if (privileges.klienci === true) {
       return (
-        <div>
+        <div className="module">
           {this.showClientsModal(modalActive)}
-          <div>Dane do wyświetlenia klientów:</div>
-          <input
-            type="text"
-            value={searchClients}
-            onChange={this.searchClients.bind(this)}
-          />
-          <button
-            className="auth__submit"
-            onClick={() => this.onButtonClick("ADD")}
-          >
-            Dodaj
-          </button>
-
+          <div className="module__title">Dane do wyświetlenia klientów:</div>
+          <div className="module__search">
+            <input
+              type="text"
+              className="module__searchInput"
+              placeholder="Wyszukaj po nazwie klienta"
+              value={searchClients}
+              onChange={this.searchClients.bind(this)}
+            />
+            <button
+              className="auth__submit module__addBtn"
+              onClick={() => this.onButtonClick("ADD")}
+            >
+              Dodaj
+            </button>
+          </div>
           <table className="crm__table">
             <thead>
               <tr>

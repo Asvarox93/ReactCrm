@@ -117,21 +117,26 @@ class Umowy extends Component {
 
     if (privileges.umowy === true) {
       return (
-        <div>
+        <div className="module">
           {this.showContractsModal(modalActive)}
-          <div>Dane do wyświetlenia Korespondencji:</div>
-          <input
-            type="text"
-            value={searchContracts}
-            onChange={this.searchContracts.bind(this)}
-          />
-          <button
-            className="auth__submit"
-            onClick={() => this.onButtonClick("ADD")}
-          >
-            Dodaj
-          </button>
-
+          <div className="module__title">
+            Dane do wyświetlenia Korespondencji:
+          </div>
+          <div className="module__search">
+            <input
+              type="text"
+              className="module__searchInput"
+              placeholder="Wyszukaj po nazwie klienta"
+              value={searchContracts}
+              onChange={this.searchContracts.bind(this)}
+            />
+            <button
+              className="auth__submit module__addBtn"
+              onClick={() => this.onButtonClick("ADD")}
+            >
+              Dodaj
+            </button>
+          </div>
           <table className="crm__table">
             <thead>
               <tr>

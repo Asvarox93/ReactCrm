@@ -7,9 +7,13 @@ import { createCrmUser, onModalOff } from "../../action/index";
 class UserRegisterModal extends Component {
   renderField(field) {
     return (
-      <div className="auth__field">
+      <div className="auth__field formModal__field">
         <label className="auth__label">{field.label}</label>
-        <input {...field.input} type={field.type} className="auth__input" />
+        <input
+          {...field.input}
+          type={field.type}
+          className="auth__input formModal__input"
+        />
         <p className="auth__errors">
           {field.meta.touched ? field.meta.error : ""}
         </p>
@@ -58,11 +62,9 @@ class UserRegisterModal extends Component {
     if (privileges.pracownicy === true) {
       return (
         <div className="formModal">
-          <div>Formularz dodawania pracownika:</div>
-
           <form
             onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
-            className="auth__form"
+            className="formModal__form"
           >
             <h2 className="auth__title">
               Formularz dodawania nowego pracownika
@@ -117,14 +119,16 @@ class UserRegisterModal extends Component {
               type="checkbox"
               component={this.renderField}
             />
-            <button className="auth__submit">Dodaj</button>
-            <button
-              type="button"
-              onClick={this.closeRegisterModal.bind(this)}
-              className="panel__btn panel__btn--return"
-            >
-              Zamknij
-            </button>
+            <div className="formModal__btnGroup">
+              <button className="auth__submit">Dodaj</button>
+              <button
+                type="button"
+                onClick={this.closeRegisterModal.bind(this)}
+                className="auth__submit formModal__btnClose"
+              >
+                Zamknij
+              </button>
+            </div>
           </form>
 
           {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
@@ -137,7 +141,7 @@ class UserRegisterModal extends Component {
           <div>
             Nie masz wystarczających uprawnień do wyświetlenia tej zawartości.
           </div>
-          <Link to="/crm" className="panel__btn panel__btn--return">
+          <Link to="/crm" className="auth__submit formModal__btnClose">
             Cofnij
           </Link>
         </div>

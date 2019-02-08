@@ -111,21 +111,26 @@ class Korespondencja extends Component {
 
     if (privileges.korespondencja === true) {
       return (
-        <div>
+        <div className="module">
           {this.showMailsModal(modalActive)}
-          <div>Dane do wyświetlenia Korespondencji:</div>
-          <input
-            type="text"
-            value={searchMails}
-            onChange={this.searchMails.bind(this)}
-          />
-          <button
-            className="auth__submit"
-            onClick={() => this.onButtonClick("ADD")}
-          >
-            Dodaj
-          </button>
-
+          <div className="module__title">
+            Dane do wyświetlenia Korespondencji:
+          </div>
+          <div className="module__search">
+            <input
+              type="text"
+              className="module__searchInput"
+              placeholder="Wyszukaj po nazwie klienta"
+              value={searchMails}
+              onChange={this.searchMails.bind(this)}
+            />
+            <button
+              className="auth__submit module__addBtn"
+              onClick={() => this.onButtonClick("ADD")}
+            >
+              Dodaj
+            </button>
+          </div>
           <table className="crm__table">
             <thead>
               <tr>

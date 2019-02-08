@@ -8,13 +8,13 @@ class UserEditModal extends Component {
   renderField(field) {
     if (field.type === "checkbox") {
       return (
-        <div className="auth__field">
+        <div className="auth__field formModal__field">
           <label className="auth__label">{field.label}</label>
           <input
             {...field.input}
             type={field.type}
             checked={field.input.value ? true : false}
-            className="auth__input"
+            className="auth__input formModal__input"
           />
           <p className="auth__errors">
             {field.meta.touched ? field.meta.error : ""}
@@ -23,14 +23,14 @@ class UserEditModal extends Component {
       );
     } else {
       return (
-        <div className="auth__field">
+        <div className="auth__field formModal__field">
           <label className="auth__label">{field.label}</label>
           <input
             {...field.input}
             type={field.type}
             placeholder={field.disabled ? "*******" : ""}
             disabled={field.disabled ? true : false}
-            className="auth__input"
+            className="auth__input formModal__input"
           />
           <p className="auth__errors">
             {field.meta.touched ? field.meta.error : ""}
@@ -72,11 +72,9 @@ class UserEditModal extends Component {
     if (privileges.pracownicy === true) {
       return (
         <div className="formModal">
-          <div>Formularz Edycji Pracownika:</div>
-
           <form
             onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
-            className="auth__form"
+            className="formModal__form"
           >
             <h2 className="auth__title">Formularz edycji pracownika</h2>
             {this.props.dataError}
@@ -131,15 +129,16 @@ class UserEditModal extends Component {
               type="checkbox"
               component={this.renderField}
             />
-
-            <button className="auth__submit">Dodaj</button>
-            <button
-              type="button"
-              onClick={this.closeRegisterModal.bind(this)}
-              className="panel__btn panel__btn--return"
-            >
-              Zamknij
-            </button>
+            <div className="formModal__btnGroup">
+              <button className="auth__submit">Dodaj</button>
+              <button
+                type="button"
+                onClick={this.closeRegisterModal.bind(this)}
+                className="auth__submit formModal__btnClose"
+              >
+                Zamknij
+              </button>
+            </div>
           </form>
         </div>
       );
@@ -149,7 +148,7 @@ class UserEditModal extends Component {
           <div>
             Nie masz wystarczających uprawnień do wyświetlenia tej zawartości.
           </div>
-          <Link to="/crm" className="panel__btn panel__btn--return">
+          <Link to="/crm" className="auth__submit formModal__btnClose">
             Cofnij
           </Link>
         </div>

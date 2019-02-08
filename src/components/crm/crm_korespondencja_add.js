@@ -17,9 +17,9 @@ class MailRegisterModal extends Component {
   renderField(field) {
     if (field.type === "select") {
       return (
-        <div className="auth__field">
+        <div className="auth__field formModal__field">
           <label className="auth__label">{field.label}</label>
-          <select {...field.input} className="auth__select">
+          <select {...field.input} className="auth__select formModal__select">
             <option disabled>Wybierz</option>
             {field.children}
           </select>
@@ -31,9 +31,13 @@ class MailRegisterModal extends Component {
     }
 
     return (
-      <div className="auth__field">
+      <div className="auth__field formModal__field">
         <label className="auth__label">{field.label}</label>
-        <input {...field.input} type={field.type} className="auth__input" />
+        <input
+          {...field.input}
+          type={field.type}
+          className="auth__input formModal__input"
+        />
         <p className="auth__errors">
           {field.meta.touched ? field.meta.error : ""}
         </p>
@@ -91,11 +95,9 @@ class MailRegisterModal extends Component {
     if (privileges.korespondencja === true) {
       return (
         <div className="formModal">
-          <div>Formularz dodawania Korespondencji:</div>
-
           <form
             onSubmit={handleSubmit(this.onFormSubmit.bind(this))}
-            className="auth__form"
+            className="formModal__form"
           >
             <h2 className="auth__title">
               Formularz dodawania nowej korespondencji
@@ -170,9 +172,11 @@ class MailRegisterModal extends Component {
                   >
                     <input {...getInputProps()} />
                     {isDragActive ? (
-                      <p>Przeciągnij plik tutaj...</p>
+                      <p className="formModal__plikDrag">
+                        Przeciągnij plik tutaj...
+                      </p>
                     ) : (
-                      <p>
+                      <p className="formModal__plik">
                         Przeciągnąć plik w to miejsce, lub kliknij na mnie aby
                         wybrać ręcznie.
                       </p>
@@ -181,17 +185,18 @@ class MailRegisterModal extends Component {
                 );
               }}
             </Dropzone>
-            <h4>Plik:</h4>
+            <h4 className="formModal__plik">Plik:</h4>
             {file}
-
-            <button className="auth__submit">Dodaj</button>
-            <button
-              type="button"
-              onClick={this.closeMailModal.bind(this)}
-              className="panel__btn panel__btn--return"
-            >
-              Zamknij
-            </button>
+            <div className="formModal__btnGroup">
+              <button className="auth__submit">Dodaj</button>
+              <button
+                type="button"
+                onClick={this.closeMailModal.bind(this)}
+                className="auth__submit formModal__btnClose"
+              >
+                Zamknij
+              </button>
+            </div>
           </form>
 
           {/* TODO: Stworzenie componentu wyszukiwarki, stworzenie componentu dodawania użytkownika(modal-box), autoryzacja */}
@@ -204,7 +209,7 @@ class MailRegisterModal extends Component {
           <div>
             Nie masz wystarczających uprawnień do wyświetlenia tej zawartości.
           </div>
-          <Link to="/crm" className="panel__btn panel__btn--return">
+          <Link to="/crm" className="auth__submit formModal__btnClose">
             Cofnij
           </Link>
         </div>

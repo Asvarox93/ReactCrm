@@ -111,21 +111,24 @@ class Pracownicy extends Component {
 
     if (privileges.pracownicy === true) {
       return (
-        <div>
+        <div className="module">
           {this.showUserRegesterModal(modalActive)}
-          <div>Dane do wyświetlenia pracowników:</div>
-          <input
-            type="text"
-            value={searchWorkers}
-            onChange={this.searchWorkers.bind(this)}
-          />
-          <button
-            className="auth__submit"
-            onClick={() => this.onButtonClick("ADD")}
-          >
-            Dodaj
-          </button>
-
+          <div className="module__title">Dane do wyświetlenia pracowników:</div>
+          <div className="module__search">
+            <input
+              type="text"
+              className="module__searchInput"
+              value={searchWorkers}
+              placeholder="Wyszukaj po nazwie pracownika"
+              onChange={this.searchWorkers.bind(this)}
+            />
+            <button
+              className="auth__submit module__addBtn"
+              onClick={() => this.onButtonClick("ADD")}
+            >
+              Dodaj
+            </button>
+          </div>
           <table className="crm__table">
             <thead>
               <tr>

@@ -101,3 +101,19 @@ $tables_btnDownload-colorH: linear-gradient(
   darken(#32a123, 10%) 66%,
   darken(#039730, 10%) 100%
 );
+//  HISTORY
+$history_bgc: #f3f3f3;
+$history_borderC: darken($main-color, 10%);
+$history_content-borderC: #cecece;
+$history_span-color: $main-color;
+$history_btnClose-bgc: #d12121;
+
+//  Module
+$module_input-borderC: $history_content-borderC;
+
+//  Module Form
+$moduleForm_bgc: $history_bgc;
+$moduleForm_borderC: $history_borderC;
+$moduleForm_fields_BorderC: $auth_input-border;
+$moduleForm_btnClose_Color: $history_btnClose-bgc;
+$moduleForm_Drag_BorderC: $history_btnClose-bgc;

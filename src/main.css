@@ -330,12 +330,12 @@ html {
     color: #000; }
 
 .crm__table {
-  border: 1px solid #1c6ea4;
   width: 100%;
   text-align: left;
   border-collapse: collapse; }
-  .crm__table td:not(.crm__tableBtn),
   .crm__table th {
+    padding: 0.5rem; }
+  .crm__table td:not(.crm__tableBtn) {
     border: 1px solid #aaaaaa;
     padding: 0.5rem; }
   .crm__table tbody td {
@@ -349,10 +349,14 @@ html {
     .crm__table thead th {
       font-size: 15px;
       font-weight: 400;
+      box-sizing: border-box;
       color: #fff;
       border-left: 2px solid #d0e4f5; }
       .crm__table thead th:first-child {
-        border-left: none; }
+        border-left: none;
+        border-radius: 0.5rem 0 0 0; }
+      .crm__table thead th:last-child {
+        border-radius: 0 0.5rem 0 0; }
   .crm__tableBtn {
     border: 1px solid #aaaaaa;
     width: 5rem;
@@ -381,34 +385,129 @@ html {
       .crm__tableBtn--download:hover {
         background: linear-gradient(to bottom, #44a644 0%, #25771a 66%, #026520 100%); }
 
-.formModal {
-  background-color: black;
-  color: #fff;
-  position: absolute;
-  top: 30%;
-  left: 35%;
+.history {
+  background-color: #f3f3f3;
+  position: fixed;
+  width: 20%;
+  max-height: 80%;
+  overflow-y: auto;
+  min-width: 20rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding: 2rem;
-  z-index: 999; }
-  .formModal label {
-    color: #fff; }
+  z-index: 999;
+  border: 1px solid #005389;
+  border-radius: 1rem; }
+  .history__title {
+    font-size: 1.2rem;
+    text-align: center; }
+  .history__content {
+    margin: 1rem 0; }
+    .history__content div {
+      border-bottom: 1px solid #cecece;
+      padding: 0.5em 0; }
+    .history__content h6 {
+      font-size: 0.8rem;
+      text-align: right; }
+    .history__content p {
+      font-size: 1rem; }
+    .history__content span {
+      color: #0072bc; }
+  .history__field {
+    margin-top: 1rem;
+    width: 100%; }
+  .history__textarea {
+    max-width: 98%;
+    width: 98%;
+    height: 5rem;
+    border: 1px solid #cecece; }
+  .history__btnGroup {
+    display: flex;
+    justify-content: space-between; }
+  .history__btnClose {
+    background-color: #d12121; }
+    .history__btnClose:hover {
+      background-color: #a51a1a; }
 
-.zlecenia {
+.module {
   display: flex;
   flex-direction: column;
   margin: 1rem; }
-  .zlecenia__title {
+  .module__title {
     font-size: 1.2rem;
     margin-bottom: 1rem; }
-  .zlecenia__search {
+  .module__search {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem; }
-    .zlecenia__searchInput {
+    .module__searchInput {
       width: calc(80% - 1rem);
       height: 2rem;
       margin-right: 1rem;
-      font-size: 1rem; }
-    .zlecenia__searchBtn {
-      margin: 0;
-      width: 20%; }
+      font-size: 1rem;
+      padding-left: 0.5rem;
+      border: 1px solid #cecece;
+      border-radius: 0.5rem;
+      transition: ease-in-out 0.2s; }
+      .module__searchInput:focus {
+        border: 1px solid #9b9b9b;
+        border-radius: 1rem;
+        outline: none;
+        transition: ease-in-out 0.2s; }
+  .module__addBtn {
+    margin: 0;
+    width: 20%; }
+
+.formModal {
+  background-color: #f3f3f3;
+  position: fixed;
+  width: 22%;
+  max-height: 80%;
+  overflow-y: auto;
+  min-width: 20rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem;
+  z-index: 999;
+  border: 1px solid #005389;
+  border-radius: 1rem; }
+  .formModal__field {
+    width: 100%; }
+  .formModal__input {
+    width: 100%;
+    max-width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin: 0.5rem 0; }
+  .formModal__select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    height: 1.6rem;
+    margin: 0.5rem 0;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.2rem;
+    padding-left: 1rem; }
+  .formModal__textarea {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    height: 5rem;
+    margin: 0.5rem 0;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.2rem;
+    padding-left: 1rem; }
+  .formModal__plik {
+    margin-top: 1rem; }
+    .formModal__plikDrag {
+      height: 5rem;
+      border: 1px solid #d12121; }
+  .formModal__btnGroup {
+    display: flex;
+    justify-content: space-between; }
+  .formModal__btnClose {
+    background-color: #d12121; }
+    .formModal__btnClose:hover {
+      background-color: #a51a1a; }
