@@ -46,7 +46,7 @@ class Crm_panel extends Component {
             Nie masz wystarczających uprawnien do wyświetlenia zawartości CRM.
             Zaloguj się!
           </h2>
-          <Link to="/autoryzacja" className="panel__btn panel__btn--return">
+          <Link to="/" className="panel__btn panel__btn--return">
             Logowanie
           </Link>
         </div>
@@ -60,7 +60,7 @@ class Crm_panel extends Component {
             ponieważ Twój adres email nie został zweryfikowany. Zweryfikuj adres
             a następnie zaloguj sie ponownie!
           </h2>
-          <Link to="/autoryzacja" className="panel__btn panel__btn--return">
+          <Link to="/" className="panel__btn panel__btn--return">
             Logowanie
           </Link>
         </div>

@@ -47,7 +47,7 @@ class Crm_topbar extends Component {
             Witaj: <span>{nickname ? nickname : email}</span>
           </div>
           <Link
-            to="/autoryzacja"
+            to="/"
             className="topbar__userLogout"
             onClick={() => {
               this.props.onSignOut();

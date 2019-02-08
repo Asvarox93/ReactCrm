@@ -9,7 +9,7 @@ import "./firebaseAuth";
 import "./main.css";
 import reducers, { initialState } from "./reducers";
 
-import App from "./components/app";
+//import App from "./components/app";
 import Auth from "./components/auth";
 import Crm_panel from "./components/crm/crm_panel";
 
@@ -24,10 +24,10 @@ ReactDOM.render(
         window.__REDUX_DEVTOOLS_EXTENSION__()
     )}
   >
-    <Router>
+    <Router basename="/web/14/">
       <div>
-        <Route exact path="/" component={App} />
-        <Route path="/autoryzacja" component={Auth} />
+        <Route exact path="/" component={Auth} />
+        {/* <Route path="/" component={Auth} /> */}
         <Route
           path="/crm"
           component={Crm_panel}
