@@ -14,7 +14,7 @@ class Dashboard extends Component {
       if (value === true) {
         if (key === "zlecenia") {
           return (
-            <Link to={"/crm/zlecenia"} className="dashboard__box">
+            <Link to={"/crm/zlecenia"} key={key} className="dashboard__box">
               <img
                 src={zleceniaImg}
                 alt="Zlecenia"
@@ -29,7 +29,7 @@ class Dashboard extends Component {
 
         if (key === "klienci") {
           return (
-            <Link to={"/crm/klienci"} className="dashboard__box">
+            <Link to={"/crm/klienci"} key={key} className="dashboard__box">
               <img src={klienciImg} alt="Klienci" className="dashboard__img" />
               <h2 className="dashboard__title">
                 Sprawdź bazę swoich aktualnych klientów
@@ -39,7 +39,11 @@ class Dashboard extends Component {
         }
         if (key === "korespondencja") {
           return (
-            <Link to={"/crm/korespondencja"} className="dashboard__box">
+            <Link
+              to={"/crm/korespondencja"}
+              key={key}
+              className="dashboard__box"
+            >
               <img
                 src={korespondencjaImg}
                 alt="Korespondencja"
@@ -53,7 +57,7 @@ class Dashboard extends Component {
         }
         if (key === "umowy") {
           return (
-            <Link to={"/crm/umowy"} className="dashboard__box">
+            <Link to={"/crm/umowy"} key={key} className="dashboard__box">
               <img src={umowyImg} alt="Umowy" className="dashboard__img" />
               <h2 className="dashboard__title">Sprawdź swoje aktualne umowy</h2>
             </Link>
@@ -61,7 +65,7 @@ class Dashboard extends Component {
         }
         if (key === "pracownicy") {
           return (
-            <Link to={"/crm/pracownicy"} className="dashboard__box">
+            <Link to={"/crm/pracownicy"} key={key} className="dashboard__box">
               <img
                 src={pracownicyImg}
                 alt="Pracownicy"
