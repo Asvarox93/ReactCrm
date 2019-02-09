@@ -41,12 +41,12 @@ class Crm_panel extends Component {
     }
     if (!loggedIn) {
       return (
-        <div>
-          <h2 className="panel__authFail">
+        <div className="panel__authFail">
+          <h2>
             Nie masz wystarczających uprawnien do wyświetlenia zawartości CRM.
             Zaloguj się!
           </h2>
-          <Link to="/" className="panel__btn panel__btn--return">
+          <Link to="/" className="auth__submit panel__btn--return">
             Logowanie
           </Link>
         </div>
@@ -54,13 +54,13 @@ class Crm_panel extends Component {
     }
     if (!auth.emailVerified) {
       return (
-        <div>
-          <h2 className="panel__authFail">
+        <div className="panel__authFail">
+          <h2>
             Nie masz wystarczających uprawnien do wyświetlenia zawartości CRM
             ponieważ Twój adres email nie został zweryfikowany. Zweryfikuj adres
             a następnie zaloguj sie ponownie!
           </h2>
-          <Link to="/" className="panel__btn panel__btn--return">
+          <Link to="/" className="auth__submit panel__btn--return">
             Logowanie
           </Link>
         </div>

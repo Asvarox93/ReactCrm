@@ -231,6 +231,23 @@ html {
   display: flex; }
   .panel__switch {
     width: 100%; }
+  .panel__authFail {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 1px solid #005389;
+    background-color: rgba(243, 243, 243, 0.6); }
+    .panel__authFail h2 {
+      font-size: 1.2rem;
+      font-weight: 400; }
+  .panel__btn--return {
+    text-decoration: none; }
 
 .topbar {
   display: flex;
